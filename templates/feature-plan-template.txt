@@ -1,0 +1,40 @@
+# Feature: {{feature_name}}
+
+## Status
+Planning
+
+## Overview
+{{description}}
+
+## Requirements
+- {{requirement_1}}
+- {{requirement_2}}
+- {{requirement_3}}
+
+## Related Systems
+<!-- From knowledge base -->
+{{#each related_systems}}
+- **{{name}}**: {{relevance}}
+{{/each}}
+
+## Technical Approach
+{{approach}}
+
+## Integration Considerations
+<!-- Based on knowledge base context -->
+{{#each integration_points}}
+- {{this}}
+{{/each}}
+
+## Acceptance Criteria
+- [ ] {{criteria_1}}
+- [ ] {{criteria_2}}
+- [ ] {{criteria_3}}
+
+## Execution Plan
+<!-- Added by `ah plan split` -->
+[{{feature_name}}-execution-plan.md]({{execution_plan_path}})
+
+## Tickets
+<!-- Added by `ah plan tickets` -->
+- Parent: [$PROJECT_KEY-XXXX]($PROJECT_BASE_URL/browse/$PROJECT_KEY-XXXX)

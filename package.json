@@ -1,0 +1,55 @@
+{
+  "name": "@tonycasey/agent-harness",
+  "dependencies": {
+    "playwright": "^1.50.0"
+  },
+  "version": "0.1.10",
+  "description": "Claude Code toolkit that automates repetitive developer tasks",
+  "author": "Tony Casey",
+  "license": "MIT",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "toolkit",
+    "automation",
+    "developer",
+    "productivity"
+  ],
+  "bin": {
+    "agent-harness": "./bin/cli.js",
+    "ah": "./bin/cli.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "node tests/unit/bin/cli.test.js",
+    "validate": "node scripts/validate.js",
+    "reinstall": "./scripts/reinstall-local.sh",
+    "reinstall:skip-init": "./scripts/reinstall-local.sh --skip-init"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    "workflows/",
+    "agents/",
+    "rules/",
+    "templates/",
+    "tools/",
+    "memory/",
+    "scripts/",
+    "hooks/",
+    "manifest.json",
+    "CLAUDE.md",
+    "README.md",
+    "INIT-CLAUDE.md",
+    ".env.example"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tonycasey/agent-harness.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

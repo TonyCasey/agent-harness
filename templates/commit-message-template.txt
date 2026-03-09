@@ -1,0 +1,6 @@
+{{type}}({{scope}}): {{subject}}
+
+{{body}}
+
+{{#if ticket_id}}Refs: {{ticket_id}}{{/if}}
+{{#if breaking_change}}BREAKING CHANGE: {{breaking_change}}{{/if}}

@@ -1,0 +1,60 @@
+# {{app_name}}
+
+## Overview
+
+- **Purpose**: {{purpose}}
+- **Tech Stack**: {{tech_stack}}
+- **Repository**: {{repository_url}}
+
+## Architecture
+
+### Folder Structure
+{{folder_structure}}
+
+### Patterns
+{{architectural_patterns}}
+
+### Entry Points
+{{entry_points}}
+
+## Public APIs
+
+### REST Endpoints
+{{rest_endpoints}}
+
+### Events
+{{events}}
+
+### Exported Utilities
+{{exported_utilities}}
+
+## Data Models
+
+### Key Entities
+{{key_entities}}
+
+### Database
+{{database_info}}
+
+### Shared Types
+{{shared_types}}
+
+## Dependencies
+
+### Internal Packages
+{{internal_packages}}
+
+### External Services
+{{external_services}}
+
+### Dependents
+{{dependent_apps}}
+
+## Integration Points
+
+{{integration_points}}
+
+---
+
+*Generated: {{generated_at}}*
+*Source: {{source}}*

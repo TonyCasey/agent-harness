@@ -1,0 +1,38 @@
+# Execution Plan: {{feature_name}}
+
+## Status
+Tasks Defined
+
+## Source Plan
+[{{feature_name}}]({{plan_path}})
+
+## Tasks
+
+### 1. {{task_1_name}}
+- **Description**: {{task_1_description}}
+- **Acceptance Criteria**: {{task_1_criteria}}
+- **Ticket**: <!-- Added by `ah plan jira` -->
+
+### 2. {{task_2_name}}
+- **Description**: {{task_2_description}}
+- **Acceptance Criteria**: {{task_2_criteria}}
+- **Ticket**: <!-- Added by `ah plan jira` -->
+
+### 3. {{task_3_name}}
+- **Description**: {{task_3_description}}
+- **Acceptance Criteria**: {{task_3_criteria}}
+- **Ticket**: <!-- Added by `ah plan jira` -->
+
+## Tickets
+<!-- Added by `ah plan tickets` -->
+- Parent: [$PROJECT_KEY-XXXX]($PROJECT_BASE_URL/browse/$PROJECT_KEY-XXXX)
+- Tasks:
+  - [ ] [$PROJECT_KEY-XXXX]($PROJECT_BASE_URL/browse/$PROJECT_KEY-XXXX) - {{task_1_name}}
+  - [ ] [$PROJECT_KEY-XXXX]($PROJECT_BASE_URL/browse/$PROJECT_KEY-XXXX) - {{task_2_name}}
+  - [ ] [$PROJECT_KEY-XXXX]($PROJECT_BASE_URL/browse/$PROJECT_KEY-XXXX) - {{task_3_name}}
+
+## Dependencies
+{{dependency_notes}}
+
+## Notes
+{{additional_notes}}

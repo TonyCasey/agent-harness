@@ -1,0 +1,31 @@
+# Verification Report
+
+## Task Summary
+- **Workflow**: {{workflow_name}}
+- **Executed**: {{timestamp}}
+- **Status**: {{PASS|FAIL}}
+
+## What Was Done
+{{brief_description_of_work}}
+
+## Evidence
+
+| Artifact | Path | Exists |
+|----------|------|--------|
+| {{artifact_1_name}} | {{artifact_1_path}} | {{yes|no}} |
+| {{artifact_2_name}} | {{artifact_2_path}} | {{yes|no}} |
+
+## Verification Checks
+
+| Check | Result | Notes |
+|-------|--------|-------|
+| Tests pass | {{PASS|FAIL}} | {{notes}} |
+| Lint clean | {{PASS|FAIL}} | {{notes}} |
+| No regressions | {{PASS|FAIL}} | {{notes}} |
+| Requirements met | {{PASS|FAIL}} | {{notes}} |
+
+## Issues Found
+{{list_any_issues_or_"None"}}
+
+## Next Steps
+{{recommended_next_actions_or_"None"}}

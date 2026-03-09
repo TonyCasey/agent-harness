@@ -1,0 +1,39 @@
+## Bug Investigation: {{ticket_id}}
+
+### Summary
+{{summary}}
+
+### Reproduction Steps
+1. {{step_1}}
+2. {{step_2}}
+3. {{step_3}}
+
+### Expected Behavior
+{{expected}}
+
+### Actual Behavior
+{{actual}}
+
+### Root Cause Analysis
+{{root_cause}}
+
+### Affected Files
+{{#each affected_files}}
+- `{{this}}`
+{{/each}}
+
+### Fix Strategy
+{{fix_strategy}}
+
+### Testing Plan
+- [ ] {{test_1}}
+- [ ] {{test_2}}
+- [ ] Regression tests pass
+- [ ] Manual verification complete
+
+### Related Issues
+{{#if related_tickets}}
+{{#each related_tickets}}
+- [{{this}}]($PROJECT_BASE_URL/browse/{{this}})
+{{/each}}
+{{/if}}

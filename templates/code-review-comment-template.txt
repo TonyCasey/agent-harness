@@ -1,0 +1,14 @@
+**[{{file}}:{{line}}]** [severity: {{severity}}]
+
+{{description}}
+
+{{#if suggestion}}
+**Suggested fix:**
+```{{language}}
+{{suggestion}}
+```
+{{/if}}
+
+{{#if question}}
+**Question:** {{question}}
+{{/if}}

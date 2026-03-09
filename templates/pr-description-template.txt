@@ -1,0 +1,23 @@
+### Changes
+
+{{summary}}
+
+- {{change_1}}
+- {{change_2}}
+- {{change_3}}
+
+### Testing
+
+### Functionality Review
+- [ ] {{acceptance_criterion_1}}
+- [ ] {{acceptance_criterion_2}}
+- [ ] All existing + new tests pass
+
+### Linked Issues
+- [{{TICKET_ID}}]($PROJECT_BASE_URL/browse/{{TICKET_ID}})
+{{#if PARENT_TICKET_ID}}- Parent: [{{PARENT_TICKET_ID}}]($PROJECT_BASE_URL/browse/{{PARENT_TICKET_ID}}){{/if}}
+
+### Documentation
+- [ ] - Documentation has been updated (if necessary)
+
+[{{TICKET_ID}}]: $PROJECT_BASE_URL/browse/{{TICKET_ID}}

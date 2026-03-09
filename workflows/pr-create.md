@@ -1,0 +1,79 @@
+---
+name: pr-create
+description: Create a pull request with proper description and checks
+agent: pr-creator
+---
+
+# PR Create Workflow
+
+## Phase 1: Research
+
+Gather context about the current branch and changes.
+
+- [ ] Verify on a feature branch (not main/master)
+- [ ] Check for uncommitted changes
+- [ ] Get commits since branching from master
+- [ ] Identify changed files
+- [ ] Extract ticket from branch name (PROJ-XXXX)
+- [ ] Detect change type (feature, fix, refactor, docs)
+
+**Output**: Branch context, commit list, change summary
+
+---
+
+## Phase 2: Plan
+
+Validate readiness and plan PR content.
+
+- [ ] Ensure branch is pushed to remote
+- [ ] Check for merge conflicts with master
+- [ ] Review test coverage for changed code
+- [ ] Identify any missing tests that must be added
+- [ ] Plan PR title and description sections
+
+**Output**: Readiness checklist, PR structure plan
+
+---
+
+## Phase 3: Execute
+
+Run checks, create tests if needed, and create the PR.
+
+- [ ] Run linters
+- [ ] Run tests (all must pass)
+- [ ] **Create unit tests for new/changed code if missing**
+- [ ] Generate PR description using `templates/pr-description-template.txt`
+- [ ] Create PR in draft mode:
+  ```bash
+  gh pr create --draft --title "[PROJ-XXXX] - ..." --base master --body "..."
+  ```
+
+PRs are created as drafts to allow for:
+- CI checks to run
+- Self-review before requesting reviewers
+
+**Output**: Draft PR created
+
+---
+
+## Phase 4: Verify
+
+Confirm PR was created correctly and record evidence.
+
+- [ ] Confirm PR URL is accessible
+- [ ] Verify CI checks have started
+- [ ] Save PR metadata to `.claude/.tmp/evidence/pr-create/`
+- [ ] Output PR URL to user
+- [ ] Remind to transition ticket to Code Review status
+
+**Output**: PR URL, CI status snapshot
+
+---
+
+## Evidence Checklist
+
+| Artifact | Path | Status |
+|----------|------|--------|
+| PR metadata | `.claude/.tmp/evidence/pr-create/pr-{number}.json` | |
+| Test results | `.claude/.tmp/evidence/pr-create/test-output.txt` | |
+| Lint results | `.claude/.tmp/evidence/pr-create/lint-output.txt` | |

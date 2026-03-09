@@ -1,0 +1,47 @@
+## Feature: {{feature_name}}
+
+**Ticket:** [{{ticket_id}}]($PROJECT_BASE_URL/browse/{{ticket_id}})
+
+### Requirements
+{{#each requirements}}
+- [ ] {{this}}
+{{/each}}
+
+### Implementation Checklist
+
+**Setup**
+- [ ] Branch created from latest main
+- [ ] Ticket moved to In Progress
+
+**Development**
+- [ ] Types defined in ts-types (if needed)
+- [ ] API endpoints implemented (if needed)
+- [ ] UI components built (if needed)
+- [ ] Unit tests written (TDD)
+- [ ] Integration tests added
+
+**Quality**
+- [ ] TypeScript strict mode passes
+- [ ] ESLint/Prettier clean
+- [ ] No console.log statements
+- [ ] Error handling complete
+- [ ] Edge cases covered
+
+**Documentation**
+- [ ] Code comments for complex logic
+- [ ] README updated (if needed)
+- [ ] API docs updated (if needed)
+
+**Pre-PR**
+- [ ] All tests pass locally
+- [ ] Changes reviewed self-review
+- [ ] Commit messages follow standards
+- [ ] PR description template filled
+
+### Repositories Affected
+{{#each repositories}}
+- {{this}}
+{{/each}}
+
+### Notes
+{{notes}}

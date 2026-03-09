@@ -1,0 +1,213 @@
+{
+  "name": "agent-harness",
+  "shortName": "ah",
+  "description": "Claude Code toolkit that automates repetitive developer tasks through harness engineering principles",
+
+  "commands": {
+    "git": {
+      "description": "Git operations with AI metadata",
+      "subcommands": {
+        "checkout": {
+          "args": "<branch>",
+          "description": "Checkout or create a branch",
+          "workflow": "git-checkout"
+        },
+        "commit": {
+          "args": "[message]",
+          "description": "Stage and commit with AI trailers",
+          "workflow": "git-commit"
+        },
+        "push": {
+          "args": "",
+          "description": "Push current branch to remote",
+          "workflow": "git-push"
+        },
+        "status": {
+          "args": "",
+          "description": "Show detailed git status",
+          "workflow": "git-status"
+        },
+        "remember": {
+          "args": "<decision>",
+          "description": "Store a decision in git memory",
+          "workflow": "git-remember"
+        },
+        "recall": {
+          "args": "[query]",
+          "description": "Search past decisions/context",
+          "workflow": "git-recall"
+        }
+      }
+    },
+    "pr": {
+      "description": "Pull request operations",
+      "subcommands": {
+        "create": {
+          "args": "[title]",
+          "description": "Create a pull request (draft mode)",
+          "workflow": "pr-create"
+        },
+        "watch": {
+          "args": "<pr-number>",
+          "description": "Watch PR and auto-fix comments",
+          "workflow": "pr-watch"
+        },
+        "stop": {
+          "args": "<pr-number>",
+          "description": "Stop watching a PR",
+          "workflow": "pr-stop"
+        },
+        "review": {
+          "args": "<repo> <pr-number>",
+          "description": "Online review (fast, no local setup)",
+          "workflow": "pr-review"
+        },
+        "review-local": {
+          "args": "<repo> <pr-number>",
+          "description": "Full local review (clones repos)",
+          "workflow": "pr-review-local"
+        },
+        "review-submit": {
+          "args": "<repo> <pr-number>",
+          "description": "Submit a pending review",
+          "workflow": "pr-review-submit"
+        }
+      }
+    },
+    "ticket": {
+      "description": "Project tool integration (Jira, Linear, ClickUp, GitHub)",
+      "subcommands": {
+        "create": {
+          "args": "<title>",
+          "description": "Create a ticket",
+          "workflow": "ticket-create"
+        },
+        "view": {
+          "args": "<ticket-id>",
+          "description": "View ticket details",
+          "workflow": "ticket-view"
+        },
+        "transition": {
+          "args": "<ticket-id> <status>",
+          "description": "Transition ticket status",
+          "workflow": "ticket-transition"
+        }
+      }
+    },
+    "plan": {
+      "description": "Feature planning",
+      "subcommands": {
+        "": {
+          "args": "<feature-name>",
+          "description": "Document a feature plan",
+          "workflow": "plan"
+        },
+        "split": {
+          "args": "<path>",
+          "description": "Break down plan into tasks",
+          "workflow": "plan-split"
+        },
+        "tickets": {
+          "args": "<path>",
+          "description": "Create tickets from tasks",
+          "workflow": "plan-tickets"
+        }
+      }
+    },
+    "knowledge": {
+      "description": "Organizational knowledge base",
+      "subcommands": {
+        "scan": {
+          "args": "",
+          "description": "Generate summary of current repo",
+          "workflow": "knowledge-scan"
+        },
+        "import": {
+          "args": "<repo-path>",
+          "description": "Import summary from another repo",
+          "workflow": "knowledge-import"
+        },
+        "search": {
+          "args": "<query>",
+          "description": "Search across knowledge base",
+          "workflow": "knowledge-search"
+        }
+      }
+    },
+    "new-feature": {
+      "description": "Development workflows",
+      "args": "<name>",
+      "workflow": "new-feature"
+    },
+    "bug-fix": {
+      "args": "<issue>",
+      "description": "Fix a bug with TDD",
+      "workflow": "bug-fix"
+    },
+    "pr-ready": {
+      "args": "",
+      "description": "Prepare branch for PR",
+      "workflow": "pr-ready"
+    },
+    "refactor": {
+      "args": "<target>",
+      "description": "Safe refactoring with tests",
+      "workflow": "refactor"
+    },
+    "test": {
+      "args": "<repo> [test-file]",
+      "description": "Run Playwright tests for a repo",
+      "workflow": "test"
+    },
+    "automate": {
+      "args": "<task>",
+      "description": "Automate a repetitive task",
+      "workflow": "automate"
+    },
+    "workflow": {
+      "args": "<name>",
+      "description": "Run a workflow by name",
+      "workflow": "<name>"
+    }
+  },
+
+  "cli": {
+    "commands": {
+      "init": {
+        "description": "Set up toolkit in .claude/ directory",
+        "flags": {}
+      },
+      "uninstall": {
+        "description": "Remove toolkit files from .claude/",
+        "aliases": ["remove"]
+      },
+      "status": {
+        "description": "Check if toolkit is installed"
+      },
+      "path": {
+        "description": "Print the path to the toolkit package"
+      },
+      "help": {
+        "description": "Show help message",
+        "aliases": ["--help", "-h"]
+      }
+    }
+  },
+
+  "agents": [
+    "developer",
+    "planner",
+    "pr-creator",
+    "pr-watcher",
+    "pr-reviewer",
+    "project-agent",
+    "knowledge-agent",
+    "task-automator"
+  ],
+
+  "requirements": {
+    "node": ">=18.0.0",
+    "tools": ["claude", "gh"],
+    "optionalTools": ["jira", "linear"]
+  }
+}

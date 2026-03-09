@@ -1,0 +1,35 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/scripts/session-start.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '## Session Context Restored' && echo '' && echo 'Knowledge base: .claude/knowledge/index.json' && echo 'Rules: .claude/rules/' && echo '' && echo 'Run `ah knowledge search <query>` to find relevant context.'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'File modified: will run formatters here when configured'"
+          }
+        ]
+      }
+    ]
+  }
+}
