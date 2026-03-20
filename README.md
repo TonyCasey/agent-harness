@@ -2,6 +2,8 @@
 
 A Claude Code toolkit implementing **harness engineering** principles to automate developer tasks through structured execution and persistent agent memory.
 
+![Agent Harness](agent-harness.png)
+
 ## What is Harness Engineering?
 
 This toolkit shifts the focus from writing code to **designing environments that enable AI agents to do reliable work**. The harness (constraints, feedback loops, documentation, rules) is what makes agents effective.
@@ -41,44 +43,48 @@ claude
 
 Commands are available immediately via `/ah`.
 
+> **Note:** All `/ah` commands below are run **inside Claude CLI**, not in your regular terminal. Start Claude with `claude`, then type the commands.
+
 ---
 
 ## Step-by-Step Usage Guide
+
+> **These commands are typed in Claude CLI, not your terminal.**
 
 ### Starting a New Feature
 
 ```bash
 # 1. Plan the feature (creates .claude/plans/user-auth.md)
-ah plan user-authentication
+/ah plan user-authentication
 
 # 2. Break into tasks (creates execution plan)
-ah plan split .claude/plans/user-auth.md
+/ah plan split .claude/plans/user-auth.md
 
 # 3. Create tickets from tasks
-ah plan tickets .claude/plans/user-auth-execution-plan.md
+/ah plan tickets .claude/plans/user-auth-execution-plan.md
 
 # 4. Start the first task
-ah git checkout PROJ-1234
+/ah git checkout PROJ-1234
 
 # 5. Implement with TDD
-ah new-feature login-form
+/ah new-feature login-form
 
 # 6. When ready for PR
-ah pr-ready      # Validates tests, lint, coverage
-ah pr create     # Creates draft PR
+/ah pr-ready      # Validates tests, lint, coverage
+/ah pr create     # Creates draft PR
 
 # 7. Watch for review comments
-ah pr watch 123  # Auto-fixes and resolves comments
+/ah pr watch 123  # Auto-fixes and resolves comments
 ```
 
 ### Fixing a Bug
 
 ```bash
 # 1. Create fix branch from ticket
-ah git checkout PROJ-5678
+/ah git checkout PROJ-5678
 
 # 2. Investigate and fix
-ah bug-fix "login fails on mobile"
+/ah bug-fix "login fails on mobile"
 # This follows R→P→E→V:
 # - Research: reproduce issue, identify affected code
 # - Plan: design fix approach
@@ -86,45 +92,45 @@ ah bug-fix "login fails on mobile"
 # - Verify: run tests, save evidence
 
 # 3. Commit with AI metadata
-ah git commit
+/ah git commit
 # Automatically adds AI-Decision, AI-Context trailers
 
 # 4. Create PR
-ah pr create "Fix mobile login"
+/ah pr create "Fix mobile login"
 ```
 
 ### Reviewing a PR
 
 ```bash
 # Fast online review (no local setup)
-ah pr review web-app 445
+/ah pr review web-app 445
 
 # Submit after reviewing comments
-ah pr review-submit web-app 445
+/ah pr review-submit web-app 445
 ```
 
 ### Managing Knowledge Across Repos
 
 ```bash
 # Generate summary of current repo
-ah knowledge scan
+/ah knowledge scan
 # Creates .claude/knowledge/self.md
 
 # Import summary from another repo
-ah knowledge import ~/code/api-server
+/ah knowledge import ~/code/api-server
 
 # Search across all known repos
-ah knowledge search "authentication"
+/ah knowledge search "authentication"
 ```
 
 ### Remembering Decisions
 
 ```bash
 # Store a decision in git memory
-ah git remember "chose JWT over sessions for stateless scaling"
+/ah git remember "chose JWT over sessions for stateless scaling"
 
 # Search past decisions
-ah git recall "authentication"
+/ah git recall "authentication"
 ```
 
 ---
@@ -212,55 +218,57 @@ Evidence provides proof of work completion and aids debugging.
 
 ## Commands Reference
 
+> **Run these inside Claude CLI** (start with `claude` in your terminal)
+
 ### Git (with AI Metadata)
-```bash
-ah git checkout <branch>       # Checkout or create branch
-ah git commit [message]        # Commit with AI trailers
-ah git push                    # Push to remote
-ah git status                  # Detailed status
-ah git remember <decision>     # Store decision in git memory
-ah git recall [query]          # Search past decisions
+```
+/ah git checkout <branch>       # Checkout or create branch
+/ah git commit [message]        # Commit with AI trailers
+/ah git push                    # Push to remote
+/ah git status                  # Detailed status
+/ah git remember <decision>     # Store decision in git memory
+/ah git recall [query]          # Search past decisions
 ```
 
 ### Pull Requests
 ```bash
-ah pr create [title]           # Create draft PR with checks
-ah pr watch <number>           # Auto-fix comments, resolve feedback
-ah pr stop <number>            # Stop watching
-ah pr review <repo> <pr>       # Online review (fast)
-ah pr review-local <repo> <pr> # Local review (full)
-ah pr review-submit <repo> <pr># Submit pending review
+/ah pr create [title]           # Create draft PR with checks
+/ah pr watch <number>           # Auto-fix comments, resolve feedback
+/ah pr stop <number>            # Stop watching
+/ah pr review <repo> <pr>       # Online review (fast)
+/ah pr review-local <repo> <pr> # Local review (full)
+/ah pr review-submit <repo> <pr># Submit pending review
 ```
 
 ### Tickets (Jira, Linear, ClickUp, GitHub Issues)
 ```bash
-ah ticket create <title>       # Create ticket
-ah ticket view <id>            # View details
-ah ticket transition <id> <s>  # Change status
+/ah ticket create <title>       # Create ticket
+/ah ticket view <id>            # View details
+/ah ticket transition <id> <s>  # Change status
 ```
 
 ### Planning
 ```bash
-ah plan <feature>              # Document feature plan
-ah plan split <path>           # Break into tasks
-ah plan tickets <path>         # Create tickets from tasks
+/ah plan <feature>              # Document feature plan
+/ah plan split <path>           # Break into tasks
+/ah plan tickets <path>         # Create tickets from tasks
 ```
 
 ### Knowledge Base
 ```bash
-ah knowledge scan              # Generate repo summary
-ah knowledge import <path>     # Import from another repo
-ah knowledge search <query>    # Search across repos
+/ah knowledge scan              # Generate repo summary
+/ah knowledge import <path>     # Import from another repo
+/ah knowledge search <query>    # Search across repos
 ```
 
 ### Development
 ```bash
-ah new-feature <name>          # Start feature with TDD
-ah bug-fix <issue>             # Systematic bug fix
-ah pr-ready                    # Validate before PR
-ah refactor <target>           # Safe refactoring
-ah test <repo> [file]          # Run Playwright tests
-ah automate <task>             # Create automation script
+/ah new-feature <name>          # Start feature with TDD
+/ah bug-fix <issue>             # Systematic bug fix
+/ah pr-ready                    # Validate before PR
+/ah refactor <target>           # Safe refactoring
+/ah test <repo> [file]          # Run Playwright tests
+/ah automate <task>             # Create automation script
 ```
 
 ---
@@ -313,7 +321,9 @@ User Command → Skill → Workflow → Agent → Rules/Templates → Output
 
 ---
 
-## CLI Commands
+## Terminal Commands
+
+These are run in your **regular terminal** (not Claude CLI):
 
 ```bash
 ah init          # Set up toolkit in .claude/

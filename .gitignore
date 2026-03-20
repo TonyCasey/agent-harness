@@ -6,7 +6,7 @@
 .DS_Store
 
 # Local settings
-.claude/settings.local.json
+.claude/
 .env
 
 # Node (if adding MCP servers)
@@ -15,3 +15,4 @@ releases/
 
 # Temporary/evidence files
 .tmp/
+video/
