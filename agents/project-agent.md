@@ -3,6 +3,7 @@ name: project-agent
 description: Manages project tool ticket operations (Jira, Linear, ClickUp, GitHub Issues)
 allowed-tools: Bash, Read
 rules:
+  - harness-reflection
   - project-tool
 ---
 

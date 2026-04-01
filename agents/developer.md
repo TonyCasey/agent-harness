@@ -4,6 +4,7 @@ description: General development agent for feature work, bug fixes, and refactor
 allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 context-tiers: [1, 2]
 rules:
+  - harness-reflection
   - commit-standards
   - typescript/coding-standards
   - typescript/testing

@@ -4,6 +4,7 @@ description: Scans repositories and manages organizational knowledge base
 allowed-tools: Read, Grep, Glob, Bash, Write
 context-tiers: [1]
 rules:
+  - harness-reflection
   - knowledge-format
 templates:
   - app-summary-template.txt

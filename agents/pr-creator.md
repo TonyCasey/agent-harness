@@ -4,6 +4,7 @@ description: Creates well-structured pull requests with proper descriptions
 allowed-tools: Read, Grep, Glob, Bash, Write
 context-tiers: [1, 2]
 rules:
+  - harness-reflection
   - pr-description
   - commit-standards
 templates:

@@ -4,6 +4,7 @@ description: Plans features and creates tickets in configured project tool
 allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 context-tiers: [1]
 rules:
+  - harness-reflection
   - project-tool
   - feature-planning
   - knowledge-format

@@ -4,6 +4,7 @@ description: Performs thorough code reviews with actionable feedback
 allowed-tools: Read, Grep, Glob, Bash
 context-tiers: [1, 2, 3]
 rules:
+  - harness-reflection
   - code-review
   - security-checks
   - typescript/coding-standards

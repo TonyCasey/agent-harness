@@ -4,6 +4,7 @@ description: Monitors PR, addresses review comments, makes fixes, and resolves f
 allowed-tools: Bash, Read, Write, Edit, Grep, Glob
 context-tiers: [1]
 rules:
+  - harness-reflection
   - code-review
   - commit-standards
   - typescript/coding-standards

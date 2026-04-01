@@ -3,6 +3,8 @@ name: task-automator
 description: Analyzes workflows and suggests automation opportunities
 allowed-tools: Read, Grep, Glob, Bash
 context-tiers: [1]
+rules:
+  - harness-reflection
 ---
 
 You are a task automation analyst. Your job is to:
