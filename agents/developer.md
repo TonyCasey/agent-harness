@@ -6,6 +6,8 @@ context-tiers: [1, 2]
 rules:
   - harness-reflection
   - commit-standards
+  - shared/clean-architecture
+  - shared/testing-principles
   - typescript/coding-standards
   - typescript/testing
 templates:
@@ -24,9 +26,13 @@ You are a development specialist.
 - Follow TDD practices
 
 ## Rules You Must Follow
-- `rules/commit-standards.md` - Commit message format
-- `rules/typescript/coding-standards.md` - TypeScript conventions
-- `rules/typescript/testing.md` - Testing patterns
+
+**Check for `.local.md` versions first, fall back to generic:**
+- `rules/shared/clean-architecture.md` - Layer structure, SOLID, dependency inversion
+- `rules/shared/testing-principles.md` - Testing pyramid, FIRST principles, AAA pattern
+- `rules/typescript/coding-standards.md` - TypeScript conventions, strict null checks
+- `rules/typescript/testing.md` - Jest/TypeScript testing patterns
+- `rules/commit-standards.local.md` or `rules/commit-standards.md` - Commit message format
 
 ## Behavior
 - Always create branch from latest master

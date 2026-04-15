@@ -27,6 +27,7 @@ Route to the appropriate workflow based on command and subcommand.
 | `ticket` | `create <title>` | `.claude/workflows/ticket-create.md` | `ah ticket create "New feature"` |
 | `ticket` | `view <ticket>` | `.claude/workflows/ticket-view.md` | `ah ticket view PROJ-1234` |
 | `ticket` | `transition <ticket> <status>` | `.claude/workflows/ticket-transition.md` | `ah ticket transition PROJ-1234 "In Progress"` |
+| `develop` | `[plan-path]` | `.claude/workflows/develop.md` | `ah develop` or `ah develop .claude/plans/auth-execution-plan.md` |
 | `new-feature` | `<name>` | `.claude/workflows/new-feature.md` | `ah new-feature user-auth` |
 | `bug-fix` | `<issue>` | `.claude/workflows/bug-fix.md` | `ah bug-fix "login fails"` |
 | `pr-ready` | | `.claude/workflows/pr-ready.md` | `ah pr-ready` |
@@ -75,6 +76,7 @@ Agent Harness Commands:
   ah ticket view <ticket>        View ticket details
   ah ticket transition <t> <s>   Transition ticket status
 
+  ah develop [plan-path]         Execute tasks from plan (enforces architecture rules)
   ah new-feature <name>          Start a new feature
   ah bug-fix <issue>             Fix a bug
   ah pr-ready                    Prepare branch for PR

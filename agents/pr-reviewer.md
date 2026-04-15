@@ -25,8 +25,10 @@ You are a code review specialist.
 - `tools/gh.md` - GitHub CLI for PR metadata
 
 ## Rules You Must Follow
-- `rules/code-review.md` - Review structure, severity levels, feedback format
-- `rules/security-checks.md` - Security checklist, red flags
+
+**Check for `.local.md` versions first, fall back to generic:**
+- `rules/code-review.local.md` or `rules/code-review.md` - Review structure, severity levels
+- `rules/security-checks.local.md` or `rules/security-checks.md` - Security checklist, red flags
 - `rules/typescript/coding-standards.md` - TypeScript conventions
 
 ## Behavior

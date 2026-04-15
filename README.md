@@ -66,8 +66,9 @@ Commands are available immediately via `/ah`.
 # 4. Start the first task
 /ah git checkout PROJ-1234
 
-# 5. Implement with TDD
-/ah new-feature login-form
+# 5. Develop with strict architecture rules
+/ah develop
+# Enforces: clean-architecture, testing-principles, coding-standards
 
 # 6. When ready for PR
 /ah pr-ready      # Validates tests, lint, coverage
@@ -263,6 +264,7 @@ Evidence provides proof of work completion and aids debugging.
 
 ### Development
 ```bash
+/ah develop [plan-path]         # Execute tasks (enforces architecture rules)
 /ah new-feature <name>          # Start feature with TDD
 /ah bug-fix <issue>             # Systematic bug fix
 /ah pr-ready                    # Validate before PR

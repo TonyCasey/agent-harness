@@ -6,6 +6,17 @@ agent: pr-creator
 
 # PR Create Workflow
 
+## Required Rules
+
+**You MUST read and follow these rules before creating the PR:**
+
+1. **PR Description**: Check for `.claude/rules/pr-description.local.md` first, fall back to `.claude/rules/pr-description.md`
+2. **Commit Standards**: Check for `.claude/rules/commit-standards.local.md` first, fall back to `.claude/rules/commit-standards.md`
+
+**These are not optional.** Verify compliance before creating the PR.
+
+---
+
 ## Phase 1: Research
 
 Gather context about the current branch and changes.
@@ -42,7 +53,7 @@ Run checks, create tests if needed, and create the PR.
 - [ ] Run linters
 - [ ] Run tests (all must pass)
 - [ ] **Create unit tests for new/changed code if missing**
-- [ ] Generate PR description using `templates/pr-description-template.txt`
+- [ ] Generate PR description using `templates/pr-description-template.local.txt` if exists, `templates/pr-description-template.local.txt` if not
 - [ ] Create PR in draft mode:
   ```bash
   gh pr create --draft --title "[PROJ-XXXX] - ..." --base master --body "..."
