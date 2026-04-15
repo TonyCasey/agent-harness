@@ -1,12 +1,14 @@
 # PR Description Rule
 
+Generic PR standards. For project-specific requirements, create `rules/pr-description.local.md`.
+
 ## Title Format
 
 ```
-[$PROJECT_KEY-XXXX] - Short description of changes
+[TICKET-ID] - Short description of changes
 ```
 
-Always include the ticket number prefix from your project tool.
+Include the ticket/issue ID from your project tool if available.
 
 ## Draft Mode
 
@@ -15,13 +17,9 @@ Always create PRs in **draft mode** (`--draft` flag). This allows:
 - Self-review before requesting reviewers
 - Mark as "Ready for review" when all checks pass
 
-## Required Label
-
-Always add the `TEST` label to trigger CI.
-
 ## Template
 
-Use template: `templates/pr-description-template.txt`
+Use template: `templates/pr-description-template.local.txt` if exists, otherwise `templates/pr-description-template.txt`
 
 ## Unit Test Coverage Requirement
 
@@ -34,58 +32,76 @@ Use template: `templates/pr-description-template.txt`
 
 ## Required Sections
 
-1. **Changes** - Summary + bullet points of what changed
-2. **Testing** - How changes were tested
-3. **Functionality Review** - Acceptance criteria checklist (must include test verification)
-4. **Linked Issues** - Ticket links
-5. **Documentation** - Documentation update checkbox
+1. **Summary** - What changed and why
+2. **Changes** - Bullet points of specific changes
+3. **Testing** - How changes were tested
+4. **Checklist** - Verification items
 
 ## Section Guidelines
 
+### Summary
+One paragraph explaining the purpose of the PR:
+
+```markdown
+## Summary
+Add helper function to locate blocks by position, enabling more efficient 
+block lookups in the editor.
+```
+
 ### Changes
-Write a concise summary (1-3 sentences), then bullet points:
+Bullet points of what changed:
 
+```markdown
+## Changes
+- Add `findBlockByPosition(blocks, position)` function
+- Returns `Block | null` based on position match
+- Add 5 unit tests covering edge cases
 ```
-Add `findXByPosition` helper function to locate blocks at positions.
 
-- Exported function `findBlockByPosition(blocks, position)` returns `IBlock | null`
-- Returns `null` with warning log if no root block exists
-- 5 unit tests covering all scenarios
-```
+### Testing
+How the changes were verified:
 
-### Functionality Review
-Specific, verifiable acceptance criteria. **Must include test verification:**
-
-```
-- [ ] Function returns correct block at position
-- [ ] Returns `null` when no block exists
-- [ ] Unit tests added for new functionality
-- [ ] All existing + new tests pass
+```markdown
+## Test Plan
+- [ ] Unit tests pass
+- [ ] Manual testing completed
+- [ ] No regressions in existing functionality
 ```
 
 ### Linked Issues
-Link to ticket and parent:
+Link to related tickets:
 
-```
-- [$PROJECT_KEY-XXXX]($PROJECT_BASE_URL/browse/$PROJECT_KEY-XXXX)
-- Parent: [$PROJECT_KEY-YYYY]($PROJECT_BASE_URL/browse/$PROJECT_KEY-YYYY)
+```markdown
+## Linked Issues
+- Fixes #123
+- Related to #456
 ```
 
 ## Post-PR Creation
 
-Transition ticket to "In Review" status:
-1. If in `To Do`, first move to `In Progress`
-2. Then move to `In Review` (or equivalent status for your tool)
+Transition ticket to "In Review" status if using a project tool.
 
 ## Sequential PR Workflow
 
 For subtasks with dependencies, use sequential PRs (not stacked):
 
 ```
-master ──┬──────────────┬──────────────┬──▶
-         │              │              │
-         └─ PROJ-1 ─PR──┘              │
-                        └─ PROJ-2 ─PR──┘
+main ──┬──────────────┬──────────────┬──▶
+       │              │              │
+       └─ TASK-1 ─PR──┘              │
+                      └─ TASK-2 ─PR──┘
 ```
 
-Each subtask branches from latest master, PRs into master, wait for merge.
+Each subtask branches from latest main, PRs into main, wait for merge.
+
+---
+
+## Local Overrides
+
+To customize for your project, create `rules/pr-description.local.md` with:
+- Company-specific sections
+- Required labels
+- Repository-specific testing instructions
+- Custom checklists
+
+The workflow will use the local file if it exists.

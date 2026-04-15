@@ -21,8 +21,10 @@ You are a PR feedback specialist.
 - Commit and push fixes
 
 ## Rules You Must Follow
-- `rules/code-review.md` - Understand review feedback structure
-- `rules/commit-standards.md` - Commit message format for fixes
+
+**Check for `.local.md` versions first, fall back to generic:**
+- `rules/code-review.local.md` or `rules/code-review.md` - Review feedback structure
+- `rules/commit-standards.local.md` or `rules/commit-standards.md` - Commit message format
 - `rules/typescript/coding-standards.md` - Code quality standards
 
 ## GitHub API Commands

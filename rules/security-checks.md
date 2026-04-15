@@ -1,5 +1,7 @@
 # Security Checks Rule
 
+Generic security standards. For project-specific requirements, create `rules/security-checks.local.md`.
+
 When reviewing code for security:
 
 ## Secrets & Credentials
@@ -39,3 +41,15 @@ If you see any of these, flag as BLOCKING:
 - `dangerouslySetInnerHTML` with user data
 - Disabled security features
 - Hardcoded secrets
+
+---
+
+## Local Overrides
+
+To customize for your project, create `rules/security-checks.local.md` with:
+- Industry-specific compliance requirements (HIPAA, PCI-DSS, SOC2)
+- Company security policies
+- Required security scanning tools
+- Custom red flags for your stack
+
+The workflow will use the local file if it exists.

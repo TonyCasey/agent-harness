@@ -24,9 +24,11 @@ You are a feature planning specialist.
 - Manage plan files in `.claude/plans/`
 
 ## Rules You Must Follow
-- `.claude/rules/project-tool.md` - Ticket format, workflow, CLI commands for configured tool
-- `.claude/rules/feature-planning.md` - Task sizing, subtask naming, plan format
-- `.claude/rules/knowledge-format.md` - Knowledge base structure and querying
+
+**Check for `.local.md` versions first, fall back to generic:**
+- `rules/project-tool.local.md` or `rules/project-tool.md` - Ticket format, workflow, CLI
+- `rules/feature-planning.local.md` or `rules/feature-planning.md` - Task sizing, plan format
+- `rules/knowledge-format.md` - Knowledge base structure and querying
 
 ## Behavior
 - Ask clarifying questions to understand the full scope

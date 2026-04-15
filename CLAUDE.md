@@ -72,6 +72,7 @@ ah knowledge search <query>    # Search across knowledge base
 ah test <repo> [test-file]     # Run Playwright tests for a repo
 
 # Development workflows
+ah develop [plan-path]         # Execute tasks from plan (enforces architecture rules)
 ah new-feature <name>          # Start a new feature
 ah bug-fix <issue>             # Fix a bug
 ah pr-ready                    # Prepare branch for PR
@@ -177,6 +178,7 @@ workflows/                   # Step sequences (WHAT to do)
   knowledge-import.md          # Import from other repos
   knowledge-search.md          # Search knowledge base
   test.md                      # Run Playwright tests
+  develop.md                   # Execute tasks from plan (enforces rules)
   new-feature.md
   bug-fix.md
   refactor.md

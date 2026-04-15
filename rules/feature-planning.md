@@ -1,5 +1,7 @@
 # Feature Planning Rule
 
+Generic planning standards. For project-specific conventions, create `rules/feature-planning.local.md`.
+
 ## File Structure
 Planning creates two files:
 - **Plan**: `.claude/plans/{feature-name}.md` - The feature specification
@@ -81,3 +83,15 @@ Structure varies by tool:
 2. Update original plan:
    - Add link to parent ticket
    - Change Status to "In Progress"
+
+---
+
+## Local Overrides
+
+To customize for your project, create `rules/feature-planning.local.md` with:
+- Custom task sizing guidelines
+- Team-specific naming conventions
+- Required plan sections
+- Integration with specific project tools
+
+The workflow will use the local file if it exists.

@@ -1,5 +1,7 @@
 # Project Tool Rule
 
+Generic project tool conventions. For project-specific configuration, create `rules/project-tool.local.md`.
+
 This rule defines conventions for project management tools. Agent Harness supports multiple tools - detect which one is configured and adapt accordingly.
 
 ## Configuration
@@ -111,3 +113,15 @@ gh issue create --title "Title" --body "Description"
 gh issue edit 123 --add-assignee @me
 gh issue close 123
 ```
+
+---
+
+## Local Overrides
+
+To customize for your project, create `rules/project-tool.local.md` with:
+- Specific project keys and URLs
+- Custom status workflows
+- Required fields for ticket creation
+- Team-specific assignment rules
+
+The workflow will use the local file if it exists.

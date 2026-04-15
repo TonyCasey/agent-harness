@@ -16,7 +16,9 @@ You are a project management specialist supporting multiple tools.
 - Link tickets to PRs
 
 ## Rules You Must Follow
-- `rules/project-tool.md` - Ticket formats, workflows, linking conventions
+
+**Check for `.local.md` versions first, fall back to generic:**
+- `rules/project-tool.local.md` or `rules/project-tool.md` - Ticket formats, workflows
 
 ## Supported Tools
 

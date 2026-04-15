@@ -21,6 +21,7 @@ ah knowledge scan              # Generate/update this repo's summary
 ah knowledge import <path>     # Import summary from another repo
 ah knowledge search <query>    # Search across all apps
 ah plan <feature>              # Plan feature with knowledge context
+ah develop [plan-path]         # Execute tasks (enforces architecture rules)
 
 # Git (with AI metadata)
 ah git commit [message]        # Commit with AI trailers
@@ -39,10 +40,12 @@ ah ticket view <ticket>        # View ticket details
 ### Rules to Follow
 
 When executing tasks, consult rules in `.claude/rules/`:
+- `shared/clean-architecture.md` - Layer structure, SOLID, dependency inversion
+- `shared/testing-principles.md` - Testing pyramid, FIRST, AAA pattern
+- `typescript/coding-standards.md` - TypeScript conventions, strict null checks
+- `typescript/testing.md` - Jest/TypeScript testing patterns
 - `commit-standards.md` - Commit message format
 - `pr-description.md` - PR format and requirements
-- `typescript/coding-standards.md` - TypeScript conventions
-- `typescript/testing.md` - Testing patterns
 
 ### Project Structure
 

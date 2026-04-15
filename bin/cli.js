@@ -92,6 +92,7 @@ function init() {
   const claudeDir = path.join(cwd, '.claude');
   const packageRoot = getPackageRoot();
   const markerFile = path.join(claudeDir, '.agent-harness');
+  const bdMarkerFile = path.join(claudeDir, '.bounce-developer');
 
   console.log('Setting up Agent Harness in .claude/\n');
 
@@ -101,11 +102,21 @@ function init() {
     console.log('Created .claude/');
   }
 
+  // Check for bounce-developer migration
+  const isMigration = !fs.existsSync(markerFile) && fs.existsSync(bdMarkerFile);
+  if (isMigration) {
+    console.log('Detected bounce-developer installation - migrating to agent-harness...\n');
+  }
+
   // Load existing tracked files (AH-owned files that we can safely update)
+  // Also recognize bounce-developer files for migration
   const trackedFiles = new Set();
-  if (fs.existsSync(markerFile)) {
+  const sourceMarker = fs.existsSync(markerFile) ? markerFile :
+                       fs.existsSync(bdMarkerFile) ? bdMarkerFile : null;
+
+  if (sourceMarker) {
     try {
-      const existing = JSON.parse(fs.readFileSync(markerFile, 'utf8'));
+      const existing = JSON.parse(fs.readFileSync(sourceMarker, 'utf8'));
       for (const entry of existing.files || []) {
         const normalized = normalizeTrackedFileEntry(entry);
         if (normalized) trackedFiles.add(normalized.path);
@@ -289,7 +300,7 @@ ${ahSection}
 
   // Build marker file with hashes for safe uninstall
   // NEVER track user data directories
-  const protectedPaths = ['knowledge/', 'plans/', '.tmp/'];
+  const protectedPaths = ['knowledge/', 'plans/', 'reviews/', '.tmp/'];
   const isProtected = (p) => protectedPaths.some(prefix => p.startsWith(prefix));
 
   const fileHashes = new Map();
@@ -317,12 +328,19 @@ ${ahSection}
   const markerContent = {
     version: require(path.join(packageRoot, 'package.json')).version,
     installedAt: new Date().toISOString(),
+    migratedFrom: isMigration ? 'bounce-developer' : undefined,
     files: [...fileHashes.entries()].map(([filePath, fileHash]) => ({
       path: filePath,
       hash: fileHash,
     })),
   };
   fs.writeFileSync(markerFile, JSON.stringify(markerContent, null, 2));
+
+  // Clean up old bounce-developer marker after successful migration
+  if (isMigration && fs.existsSync(bdMarkerFile)) {
+    fs.unlinkSync(bdMarkerFile);
+    console.log('Removed old .bounce-developer marker');
+  }
 
   // Install Playwright browsers if not already installed
   // Run from package root where playwright is a dependency
@@ -414,7 +432,7 @@ function uninstall() {
   // Clean up empty directories (NEVER touch user data directories)
   const dirsToClean = ['skills', 'workflows', 'agents', 'rules', 'templates', 'tools', 'memory', 'scripts'];
   // Explicitly protect user data directories
-  const protectedDirs = ['knowledge', 'plans'];
+  const protectedDirs = ['knowledge', 'plans', 'reviews'];
   for (const dir of dirsToClean) {
     if (protectedDirs.includes(dir)) continue;
     const dirPath = path.join(claudeDir, dir);

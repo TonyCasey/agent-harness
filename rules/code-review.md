@@ -1,5 +1,7 @@
 # Code Review Rule
 
+Generic review standards. For project-specific criteria, create `rules/code-review.local.md`.
+
 When reviewing code, check for:
 
 ## Correctness
@@ -37,3 +39,15 @@ When reviewing code, check for:
 - **Blocking**: Must fix before merge (bugs, security, broken functionality)
 - **Suggestion**: Should consider (better approaches, minor issues)
 - **Nitpick**: Optional (style, preferences)
+
+---
+
+## Local Overrides
+
+To customize for your project, create `rules/code-review.local.md` with:
+- Company-specific review criteria
+- Required architectural checks
+- Domain-specific validation rules
+- Custom severity definitions
+
+The workflow will use the local file if it exists.
