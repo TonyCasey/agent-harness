@@ -18,14 +18,18 @@ Route to the appropriate workflow based on command and subcommand.
 | `git` | `status` | `.claude/workflows/git-status.md` | `ah git status` |
 | `git` | `remember <decision>` | `.claude/workflows/git-remember.md` | `ah git remember "chose JWT for auth"` |
 | `git` | `recall [query]` | `.claude/workflows/git-recall.md` | `ah git recall "authentication"` |
+| `worktree` | `create <name> [base-branch]` | `.claude/workflows/worktree-create.md` | `ah worktree create PROJ-31 main` |
+| `worktree` | `sync` | `.claude/workflows/worktree-sync.md` | `ah worktree sync` |
 | `pr` | `create [title]` | `.claude/workflows/pr-create.md` | `ah pr create "Add login feature"` |
 | `pr` | `watch <pr-number>` | `.claude/workflows/pr-watch.md` | `ah pr watch 123` |
 | `pr` | `stop <pr-number>` | `.claude/workflows/pr-stop.md` | `ah pr stop 123` |
 | `pr` | `review <repo> <pr-number>` | `.claude/workflows/pr-review.md` |
 | `pr` | `review-local <repo> <pr-number>` | `.claude/workflows/pr-review-local.md` |
-| `pr` | `review-submit <repo> <pr-number>` | `.claude/workflows/pr-review-submit.md` | 
+| `pr` | `review-submit <repo> <pr-number>` | `.claude/workflows/pr-review-submit.md` |
+| `pr` | `solid` | `.claude/workflows/pr-solid.md` | `ah pr solid` |
 | `ticket` | `create <title>` | `.claude/workflows/ticket-create.md` | `ah ticket create "New feature"` |
 | `ticket` | `view <ticket>` | `.claude/workflows/ticket-view.md` | `ah ticket view PROJ-1234` |
+| `ticket` | `start <ticket>` | `.claude/workflows/ticket-start.md` | `ah ticket start 28` |
 | `ticket` | `transition <ticket> <status>` | `.claude/workflows/ticket-transition.md` | `ah ticket transition PROJ-1234 "In Progress"` |
 | `develop` | `[plan-path]` | `.claude/workflows/develop.md` | `ah develop` or `ah develop .claude/plans/auth-execution-plan.md` |
 | `new-feature` | `<name>` | `.claude/workflows/new-feature.md` | `ah new-feature user-auth` |
@@ -65,15 +69,20 @@ Agent Harness Commands:
   ah git remember <decision>     Store a decision in git memory
   ah git recall [query]          Search past decisions/context
 
+  ah worktree create <name> [base]  Create worktree + sync .env files (default base: main)
+  ah worktree sync                  Re-sync .env files from main repo into current worktree
+
   ah pr create [title]           Create a pull request
   ah pr watch <pr-number>        Watch PR and auto-fix comments
   ah pr stop <pr-number>         Stop watching a PR
   ah pr review <repo> <pr>       Online review (fast, no local setup)
   ah pr review-local <repo> <pr> Full local review (clones, runs services)
   ah pr review-submit <repo> <pr> Submit a pending review
+  ah pr solid                    SOLID principles audit for current branch
 
   ah ticket create <title>       Create a ticket (Jira, Linear, ClickUp, GitHub)
   ah ticket view <ticket>        View ticket details
+  ah ticket start <ticket>       Branch from staging, transition ticket, start dev
   ah ticket transition <t> <s>   Transition ticket status
 
   ah develop [plan-path]         Execute tasks from plan (enforces architecture rules)

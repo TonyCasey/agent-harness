@@ -46,16 +46,22 @@ ah git status                  # Show detailed git status
 ah git remember <decision>     # Store a decision in git memory
 ah git recall [query]          # Search past decisions/context
 
+# Worktree commands
+ah worktree create <name> [base]  # Create worktree + sync .env files
+ah worktree sync                  # Re-sync .env files from main repo
+
 # PR commands
 ah pr create [title]           # Create a pull request (draft mode)
 ah pr watch <pr-number>        # Address comments, make fixes, resolve (loops)
 ah pr stop <pr-number>         # Stop watching a PR
 ah pr review <repo> <pr>       # Online review (fast, creates pending review)
 ah pr review-submit <repo> <pr> # Submit a pending review
+ah pr solid                    # SOLID principles audit for current branch
 
 # Ticket commands (Jira, Linear, ClickUp, GitHub Issues)
 ah ticket create <title>       # Create a ticket
 ah ticket view <ticket>        # View ticket details
+ah ticket start <ticket>       # Branch from staging, transition, start dev
 ah ticket transition <t> <s>   # Transition ticket status
 
 # Planning commands
@@ -168,8 +174,12 @@ workflows/                   # Step sequences (WHAT to do)
   pr-review.md               # Online review (fast, no local setup)
   pr-review-local.md         # Full local review (clones repos)
   pr-ready.md                # Pre-PR checks
+  pr-solid.md                # SOLID principles audit
+  worktree-create.md         # Create worktree + sync .env
+  worktree-sync.md           # Re-sync .env files
   ticket-create.md             # Create ticket (multi-tool)
   ticket-view.md               # View ticket details
+  ticket-start.md              # Start work on a ticket
   ticket-transition.md         # Transition ticket status
   plan.md                      # Document feature plans
   plan-split.md                # Break plans into tasks
@@ -201,6 +211,7 @@ rules/                       # Constraints (MUST follow)
   security-checks.md         # Security checklist
   commit-standards.md        # Commit message format
   ci-status.md               # CI interpretation
+  harness-reflection.md      # Self-improvement, artifact promotion
   shared/                    # Language-agnostic principles
     clean-architecture.md    # Layer structure, SOLID, DI
     testing-principles.md    # Testing pyramid, FIRST, AAA
@@ -224,8 +235,13 @@ knowledge/                   # Organizational knowledge base
 tools/                       # External tool docs
   gh.md                      # GitHub CLI (inline comments)
   git.md, node.md, jq.md, jira.md, playwright.md
+docs/                        # Documentation
+  testing-taxonomy.md        # Four-tier testing structure
 hooks/hooks.json             # Event automation
 scripts/                     # Shell scripts
+  worktree-sync-env.sh       # Sync .env files to worktrees
+memory/                      # Agent memory files
+  harness.json               # Harness self-improvement tracking
 ```
 
 ## Adding Components
