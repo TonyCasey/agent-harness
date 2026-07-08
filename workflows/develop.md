@@ -61,7 +61,7 @@ Design implementation following Clean Architecture.
 Implement following TDD and Clean Architecture.
 
 ### 3.1 Setup
-- [ ] Fetch latest from main branch
+- [ ] Fetch latest `staging`
 - [ ] Create/checkout task branch (ticket ID or descriptive name)
 
 ### 3.2 Interfaces First

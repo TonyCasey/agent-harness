@@ -11,7 +11,7 @@ agent: developer
 Check current branch state and gather context.
 
 - [ ] Verify all changes are committed
-- [ ] Verify branch is ahead of master
+- [ ] Verify branch is ahead of `staging`
 - [ ] Verify branch is pushed to remote
 - [ ] Identify what changed in this branch
 

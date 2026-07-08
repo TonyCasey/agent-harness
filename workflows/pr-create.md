@@ -21,9 +21,9 @@ agent: pr-creator
 
 Gather context about the current branch and changes.
 
-- [ ] Verify on a feature branch (not main/master)
+- [ ] Verify on a feature branch (not `staging`/`main`)
 - [ ] Check for uncommitted changes
-- [ ] Get commits since branching from master
+- [ ] Get commits since branching from `staging`
 - [ ] Identify changed files
 - [ ] Extract ticket from branch name (PROJ-XXXX)
 - [ ] Detect change type (feature, fix, refactor, docs)
@@ -37,7 +37,7 @@ Gather context about the current branch and changes.
 Validate readiness and plan PR content.
 
 - [ ] Ensure branch is pushed to remote
-- [ ] Check for merge conflicts with master
+- [ ] Check for merge conflicts with `staging`
 - [ ] Review test coverage for changed code
 - [ ] Identify any missing tests that must be added
 - [ ] Plan PR title and description sections
@@ -56,7 +56,7 @@ Run checks, create tests if needed, and create the PR.
 - [ ] Generate PR description using `templates/pr-description-template.local.txt` if exists, `templates/pr-description-template.local.txt` if not
 - [ ] Create PR in draft mode:
   ```bash
-  gh pr create --draft --title "[PROJ-XXXX] - ..." --base master --body "..."
+  gh pr create --draft --title "[PROJ-XXXX] - ..." --base staging --body "..."
   ```
 
 PRs are created as drafts to allow for:

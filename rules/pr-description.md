@@ -86,13 +86,13 @@ Transition ticket to "In Review" status if using a project tool.
 For subtasks with dependencies, use sequential PRs (not stacked):
 
 ```
-main ──┬──────────────┬──────────────┬──▶
-       │              │              │
-       └─ TASK-1 ─PR──┘              │
-                      └─ TASK-2 ─PR──┘
+staging ──┬──────────────┬──────────────┬──▶
+          │              │              │
+          └─ TASK-1 ─PR──┘              │
+                         └─ TASK-2 ─PR──┘
 ```
 
-Each subtask branches from latest main, PRs into main, wait for merge.
+Each subtask branches from latest `staging`, PRs into `staging`, wait for merge.
 
 ---
 
