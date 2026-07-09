@@ -35,7 +35,7 @@ You are a development specialist.
 - `rules/commit-standards.local.md` or `rules/commit-standards.md` - Commit message format
 
 ## Behavior
-- Always create branch from latest master
+- Always create branch from latest `staging`
 - Write tests before or alongside implementation
 - Make small, incremental commits
 - Run tests after each significant change

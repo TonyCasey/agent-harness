@@ -27,6 +27,7 @@ Route to the appropriate workflow based on command and subcommand.
 | `pr` | `review-local <repo> <pr-number>` | `.claude/workflows/pr-review-local.md` |
 | `pr` | `review-submit <repo> <pr-number>` | `.claude/workflows/pr-review-submit.md` |
 | `pr` | `solid` | `.claude/workflows/pr-solid.md` | `ah pr solid` |
+| `ticket` | `ship <ticket>` | `.claude/workflows/ticket-ship.md` | `ah ticket ship PROJ-59` |
 | `ticket` | `create <title>` | `.claude/workflows/ticket-create.md` | `ah ticket create "New feature"` |
 | `ticket` | `view <ticket>` | `.claude/workflows/ticket-view.md` | `ah ticket view PROJ-1234` |
 | `ticket` | `start <ticket>` | `.claude/workflows/ticket-start.md` | `ah ticket start 28` |
@@ -80,6 +81,7 @@ Agent Harness Commands:
   ah pr review-submit <repo> <pr> Submit a pending review
   ah pr solid                    SOLID principles audit for current branch
 
+  ah ticket ship <ticket>        Ticket -> code -> tests -> codex review -> draft PR (full pipeline)
   ah ticket create <title>       Create a ticket (Jira, Linear, ClickUp, GitHub)
   ah ticket view <ticket>        View ticket details
   ah ticket start <ticket>       Branch from staging, transition ticket, start dev

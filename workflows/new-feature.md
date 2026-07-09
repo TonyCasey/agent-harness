@@ -25,7 +25,7 @@ Understand the feature requirements and codebase context.
 
 Design the implementation approach.
 
-- [ ] Fetch latest master
+- [ ] Fetch latest `staging`
 - [ ] Plan file structure and naming
 - [ ] Define expected behavior (test cases)
 - [ ] Identify any dependencies or prerequisites

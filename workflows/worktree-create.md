@@ -15,7 +15,7 @@ Creates a worktree at `<main-repo>/.claude/worktrees/<name>` and copies all giti
 Parse arguments and resolve paths.
 
 - [ ] Extract `<name>` (required) — used for both the worktree directory and the new branch
-- [ ] Extract `<base-branch>` (optional, default: `main`)
+- [ ] Extract `<base-branch>` (optional, default: `staging`)
 - [ ] Resolve main repo path:
   ```bash
   MAIN_REPO=$(git worktree list --porcelain | awk '/^worktree / {print $2; exit}')
