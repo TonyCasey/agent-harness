@@ -19,10 +19,8 @@ gates defined below. Runs interactively (user watching) or headless
 - Base branch is `staging` — never `main`/`master`.
 - Draft PRs only. Never merge. Never mark ready-for-review.
 - One ticket per run.
-- All project-tool access via REST API/CLI (for ClickUp: `$CLICKUP_API_KEY` +
-  `$CLICKUP_TEAM_ID` from `.claude/.env`), never MCP — headless runs have no
-  MCP auth. Curl examples below are ClickUp; for Jira/Linear/GitHub use the
-  equivalents in `ticket-transition.md`.
+- All ClickUp access via REST API (`$CLICKUP_API_KEY` + `$CLICKUP_TEAM_ID`
+  from `.claude/.env`), never MCP — headless runs have no MCP auth.
 - Every stop (success or failure) is mirrored to the ClickUp task so the
   pipeline is observable from ClickUp alone.
 
@@ -67,7 +65,7 @@ curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task
 
 - [ ] Branch plan per `ticket-start.md`: fetch origin, checkout latest
   `staging`, create/checkout branch named exactly `$TICKET`
-- [ ] Plan ticket transition to "in progress"
+- [ ] Plan ticket transition to the list's working status (fetch exact names first — see 3.1)
 - [ ] Outline implementation:
   - **Bug** → follow `.claude/workflows/bug-fix.md` (failing test first,
     root cause, minimal fix)
@@ -87,7 +85,9 @@ curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task
 - [ ] Working tree clean check (warn interactive / EXIT headless if dirty)
 - [ ] `git fetch origin && git checkout staging && git pull --ff-only`
 - [ ] `git checkout -b $TICKET` (or checkout + rebase onto `staging` if it exists)
-- [ ] Transition task to "in progress" (`ticket-transition.md`, ClickUp curl
+- [ ] Fetch the list's status names (GET /api/v2/list/{list_id} — statuses vary per list;
+  this list uses "in development", NOT "in progress"), then transition the
+  task to the working status (`ticket-transition.md`, ClickUp curl
   with `custom_task_ids=true&team_id=$CLICKUP_TEAM_ID`)
 
 ### 3.2 Implement
@@ -98,9 +98,10 @@ curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task
 
 ### 3.3 Test
 
-- [ ] Run the test suites for affected packages/projects (fastest relevant
-  scope first, then the full affected suite) using the project's test runner
-- [ ] Run the project's lint and typecheck commands
+- [ ] Run the test suites for affected packages (single-file jest runs first,
+  then package suite): `npx nx test <project>` / `cd packages/<p> && npx jest`
+- [ ] Run lint + typecheck: `npx nx lint:diff-with-main <project>` and
+  `npx nx typecheck <project>`
 - [ ] Save outputs to `.claude/.tmp/evidence/ticket-ship/$TICKET/`
 
 ### 🚧 GATE 2 — Tests green (max 3 fix iterations)
@@ -111,7 +112,7 @@ If tests/lint/typecheck fail: fix and re-run. Count iterations. After the
 - Never weaken, skip, or delete tests to get green.
 - **Interactive**: report the failure with output; ask how to proceed.
 - **Headless**: push the branch as-is (WIP, no PR), comment on the ClickUp
-  task with the failure summary + branch link, leave status "in progress",
+  task with the failure summary + branch link, leave the working status,
   EXIT.
 
 ### 3.4 PR readiness
@@ -155,6 +156,15 @@ evaluate/fix/re-run loop:
     verdict + branch link, EXIT (same shape as Gate 2 headless failure)
 - [ ] Record the final verdict line for the PR description:
   `Cross-model review: codex — <N> blocking after <R> round(s)`
+- [ ] Post codex review summary to ClickUp task (use structured `comment`
+  array — plain text, no markdown tables):
+  ```bash
+  curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task_ids=true&team_id=$CLICKUP_TEAM_ID" \
+    -H "Authorization: $CLICKUP_API_KEY" -H "Content-Type: application/json" \
+    -d '{"comment": [
+      {"text": "🔍 Codex review (Gate 3)\n\n• [P<n>] <finding summary>\n  → Classification: <blocking|suggestion|nitpick>\n  → Action: <FIXED|DEFERRED|REBUTTED> — <reason>\n\n✅ Verdict: <N> blocking after <R> round(s)"}
+    ]}'
+  ```
 - [ ] If `codex` is unavailable or unauthenticated: **interactive** — ask
   whether to skip the gate; **headless** — skip, and mark the PR
   description + evidence with `Cross-model review: SKIPPED (codex unavailable)`
@@ -195,11 +205,23 @@ Verify before close-out; fix and re-verify if any fail:
     -H "Authorization: $CLICKUP_API_KEY" -H "Content-Type: application/json" \
     -d '{"status": "in review"}'
   ```
-- [ ] Comment the PR link on the task:
+- [ ] Comment the PR link on the task (use structured `comment` array for
+  mentions — `comment_text` does not support @mentions):
   ```bash
   curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task_ids=true&team_id=$CLICKUP_TEAM_ID" \
     -H "Authorization: $CLICKUP_API_KEY" -H "Content-Type: application/json" \
-    -d '{"comment_text": "🤖 ticket-ship: draft PR ready → <PR_URL>\nTests: <n> passing | Lint: clean | Typecheck: clean"}'
+    -d '{"comment": [
+      {"text": "🤖 ticket-ship: draft PR ready → <PR_URL>\nTests: <n> passing | Lint: clean | Typecheck: clean"}
+    ]}'
+  ```
+- [ ] Notify assignee that PR is ready for review (structured mention):
+  ```bash
+  curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task_ids=true&team_id=$CLICKUP_TEAM_ID" \
+    -H "Authorization: $CLICKUP_API_KEY" -H "Content-Type: application/json" \
+    -d '{"comment": [
+      {"type": "tag", "text": "@<assignee_name>"},
+      {"text": " PR ready for review! <PR_URL>"}
+    ]}'
   ```
 - [ ] Confirm task status is now "in review" (GET the task)
 - [ ] Save run summary to `.claude/.tmp/evidence/ticket-ship/$TICKET/summary.md`
