@@ -180,7 +180,8 @@ evaluate/fix/re-run loop:
   ```
 - [ ] Body follows `.claude/rules/pr-description.md` (Changes, Testing,
   Functionality Review with test-verification checkboxes, Linked Issues
-  with the ClickUp task URL, Documentation)
+  with the ClickUp task URL, Documentation). Take the task URL from the
+  `url` field of the ticket snapshot — never construct/guess it
 - [ ] Testing section includes the Gate 3 verdict line
   (`Cross-model review: codex — <N> blocking after <R> round(s)`)
 
