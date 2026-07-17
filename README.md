@@ -246,6 +246,7 @@ Evidence provides proof of work completion and aids debugging.
 /ah ticket create <title>       # Create ticket
 /ah ticket view <id>            # View details
 /ah ticket transition <id> <s>  # Change status
+/ah ticket ship <id>            # One command to take a ticket through all stages to PR
 ```
 
 ### Planning
