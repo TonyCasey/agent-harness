@@ -54,6 +54,7 @@ Run checks, create tests if needed, and create the PR.
   mirror (`scripts/ci-local.sh` — same path-gated jobs as the hosted CI),
   it is the gate; all triggered jobs must pass before the PR is created:
   ```bash
+  mkdir -p .claude/.tmp/evidence/pr-create   # tee can't create the directory
   set -o pipefail   # without it, tee's exit status masks a red run
   scripts/ci-local.sh --dry-run   # see which jobs the diff triggers
   scripts/ci-local.sh 2>&1 | tee .claude/.tmp/evidence/pr-create/ci-local.txt

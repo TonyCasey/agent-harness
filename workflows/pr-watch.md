@@ -61,16 +61,16 @@ author whose comments were addressed — **once per author per fix round**
 author again until they respond with new comments):
 
 - [ ] Skip the PR author (GitHub rejects the request; they see replies anyway)
-- [ ] Copilot (`copilot-pull-request-reviewer`) — `$PR_NUMBER` is the watched
-  PR number this workflow was invoked with:
+- [ ] Copilot (`copilot-pull-request-reviewer[bot]`) — `<number>` is the
+  watched PR number this workflow was invoked with:
   ```bash
-  gh api -X POST "repos/{owner}/{repo}/pulls/$PR_NUMBER/requested_reviewers" \
+  gh api -X POST "repos/{owner}/{repo}/pulls/<number>/requested_reviewers" \
     -f 'reviewers[]=copilot-pull-request-reviewer[bot]'
   ```
-- [ ] Codex (`chatgpt-codex-connector`): reviewer requests don't reach it —
-  re-trigger with a PR comment instead:
+- [ ] Codex (`chatgpt-codex-connector[bot]`): reviewer requests don't reach
+  it — re-trigger with a PR comment instead:
   ```bash
-  gh pr comment "$PR_NUMBER" --body "@codex review"
+  gh pr comment <number> --body "@codex review"
   ```
 - [ ] Human reviewers: same `requested_reviewers` endpoint with their login
 - [ ] Reply-only cycles (no code changes pushed) re-request nothing

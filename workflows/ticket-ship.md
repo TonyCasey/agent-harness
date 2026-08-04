@@ -105,6 +105,7 @@ curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task
   (`scripts/ci-local.sh`, running the same path-gated jobs as the hosted
   CI), it is the gate:
   ```bash
+  mkdir -p .claude/.tmp/evidence/ticket-ship/$TICKET   # tee can't create it
   set -o pipefail   # without it, tee's exit status masks a red run
   scripts/ci-local.sh --dry-run   # see which jobs the diff triggers
   scripts/ci-local.sh 2>&1 | tee .claude/.tmp/evidence/ticket-ship/$TICKET/ci-local.txt
