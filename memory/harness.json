@@ -1,6 +1,31 @@
 {
   "name": "harness",
-  "last_updated": "2026-04-01T00:00:00Z",
+  "last_updated": "2026-08-04T00:00:00Z",
   "candidates": [],
-  "promotions": []
+  "promotions": [
+    {
+      "date": "2026-08-04",
+      "type": "workflow",
+      "original_path": "solv-platform/.claude/workflows/ticket-ship.md (3.3 + Gate 2)",
+      "promoted_to": "workflows/ticket-ship.md",
+      "purpose": "Local CI mirror (scripts/ci-local.sh) as the authoritative Gate 2 check: pipefail+tee so exit codes survive, --dry-run to preview triggered jobs, evidence reuse keyed on HEAD sha, fallback to direct nx runs when no mirror script exists",
+      "context": "Developed in solv-platform ticket-ship runs; generalized to conditional wording for the harness"
+    },
+    {
+      "date": "2026-08-04",
+      "type": "workflow",
+      "original_path": "solv-platform/.claude/workflows/pr-create.md",
+      "promoted_to": "workflows/pr-create.md",
+      "purpose": "CI-mirror pre-flight with same-HEAD evidence reuse, plus Copilot review request on draft PRs via REST requested_reviewers endpoint (gh pr edit --add-reviewer cannot resolve the bot) with Phase 4 verification; also fixed the template fallback line that pointed both branches at .local.txt",
+      "context": "Developed in solv-platform PR workflows"
+    },
+    {
+      "date": "2026-08-04",
+      "type": "workflow",
+      "original_path": "solv-platform/.claude/workflows/pr-watch.md",
+      "promoted_to": "workflows/pr-watch.md",
+      "purpose": "Re-request reviews after each fix round, once per author per round: Copilot via REST endpoint, Codex via @codex review comment (reviewer requests don't reach it), humans via requested_reviewers; skip PR author; reply-only cycles re-request nothing",
+      "context": "Developed in solv-platform PR watch cycles; promoted verbatim"
+    }
+  ]
 }

@@ -98,16 +98,33 @@ curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task
 
 ### 3.3 Test
 
-- [ ] Run the test suites for affected packages (single-file jest runs first,
-  then package suite): `npx nx test <project>` / `cd packages/<p> && npx jest`
-- [ ] Run lint + typecheck: `npx nx lint:diff-with-main <project>` and
-  `npx nx typecheck <project>`
-- [ ] Save outputs to `.claude/.tmp/evidence/ticket-ship/$TICKET/`
+- [ ] Fast feedback while iterating: single-file jest runs for changed code
+  (`cd packages/<p> && npx jest <file>`), plus
+  `npx nx lint:diff-with-main <project> --configuration=fix` for quick lint fixes
+- [ ] Authoritative check — if the project provides a local CI mirror
+  (`scripts/ci-local.sh`, running the same path-gated jobs as the hosted
+  CI), it is the gate:
+  ```bash
+  mkdir -p .claude/.tmp/evidence/ticket-ship/$TICKET   # tee can't create it
+  set -o pipefail   # without it, tee's exit status masks a red run
+  scripts/ci-local.sh --dry-run   # see which jobs the diff triggers
+  scripts/ci-local.sh 2>&1 | tee .claude/.tmp/evidence/ticket-ship/$TICKET/ci-local.txt
+  ```
+  Use `--no-tests` for intermediate iterations if the suites are slow, but
+  the full run (default flags) must be green before Gate 2 passes. Suites
+  the mirror keeps behind opt-in flags (e.g. storybook, integration) still
+  run in hosted CI on the PR — pass the flags when the change touches
+  those areas.
+- [ ] Without a CI mirror script: run the affected package suites
+  (`npx nx test <project>`), lint + typecheck
+  (`npx nx lint:diff-with-main <project>`, `npx nx typecheck <project>`),
+  and save outputs to `.claude/.tmp/evidence/ticket-ship/$TICKET/`
 
-### 🚧 GATE 2 — Tests green (max 3 fix iterations)
+### 🚧 GATE 2 — Local CI green (max 3 fix iterations)
 
-If tests/lint/typecheck fail: fix and re-run. Count iterations. After the
-**3rd** failed iteration, STOP:
+If the authoritative check fails (tests, lint, typecheck, builds, or repo
+guards): fix and re-run. Count iterations. After the **3rd** failed
+iteration, STOP:
 
 - Never weaken, skip, or delete tests to get green.
 - **Interactive**: report the failure with output; ask how to proceed.
@@ -171,7 +188,10 @@ evaluate/fix/re-run loop:
 
 ### 3.5 Create draft PR
 
-- [ ] Delegate to `.claude/workflows/pr-create.md`. Non-negotiables:
+- [ ] Delegate to `.claude/workflows/pr-create.md`. Its local-CI pre-flight
+  reuses the Gate 2 evidence when HEAD is unchanged; if Gate 3 codex fixes
+  added commits, it re-runs — that re-validation is wanted, not redundant.
+  Non-negotiables:
   ```bash
   gh pr create --draft --base staging \
     --title "[$TICKET] - <short description>" \
@@ -239,7 +259,7 @@ Verify before close-out; fix and re-verify if any fail:
 |---|---|---|
 | Ambiguous ticket (Gate 1) | Ask user | ClickUp comment + exit |
 | Dirty working tree | Warn + ask | Exit with comment |
-| Tests red after 3 iterations (Gate 2) | Report + ask | Push WIP branch, comment, exit |
+| Local CI red after 3 iterations (Gate 2) | Report + ask | Push WIP branch, comment, exit |
 | Blocking codex findings after 2 rounds (Gate 3) | Report + ask | Push WIP branch, comment, exit |
 | codex unavailable (Gate 3) | Ask to skip | Skip; mark PR + evidence SKIPPED |
 | PR shape wrong (Gate 4) | Fix + re-verify | Fix + re-verify; if impossible, comment + exit |
@@ -252,7 +272,7 @@ Verify before close-out; fix and re-verify if any fail:
 | Artifact | Path | Status |
 |----------|------|--------|
 | Ticket snapshot | `.claude/.tmp/evidence/ticket-ship/$TICKET/ticket.json` | |
-| Test output | `.claude/.tmp/evidence/ticket-ship/$TICKET/tests.txt` | |
-| Lint/typecheck output | `.claude/.tmp/evidence/ticket-ship/$TICKET/lint-typecheck.txt` | |
+| Local CI output (Gate 2) | `.claude/.tmp/evidence/ticket-ship/$TICKET/ci-local.txt` | |
+| Test/lint output (no CI mirror) | `.claude/.tmp/evidence/ticket-ship/$TICKET/tests.txt`, `lint-typecheck.txt` | |
 | Codex review round(s) | `.claude/.tmp/evidence/ticket-ship/$TICKET/codex-review-round*.md` | |
 | Run summary | `.claude/.tmp/evidence/ticket-ship/$TICKET/summary.md` | |

@@ -55,7 +55,27 @@ After all comments:
 - [ ] Commit: `fix: address PR review comments`
 - [ ] Push to branch
 
-**Output**: Comments addressed, changes pushed
+If fixes were pushed this cycle, re-request a review from each distinct
+author whose comments were addressed — **once per author per fix round**
+(track re-requested authors in the cycle log; don't re-request the same
+author again until they respond with new comments):
+
+- [ ] Skip the PR author (GitHub rejects the request; they see replies anyway)
+- [ ] Copilot (`copilot-pull-request-reviewer[bot]`) — `<number>` is the
+  watched PR number this workflow was invoked with:
+  ```bash
+  gh api -X POST "repos/{owner}/{repo}/pulls/<number>/requested_reviewers" \
+    -f 'reviewers[]=copilot-pull-request-reviewer[bot]'
+  ```
+- [ ] Codex (`chatgpt-codex-connector[bot]`): reviewer requests don't reach
+  it — re-trigger with a PR comment instead:
+  ```bash
+  gh pr comment <number> --body "@codex review"
+  ```
+- [ ] Human reviewers: same `requested_reviewers` endpoint with their login
+- [ ] Reply-only cycles (no code changes pushed) re-request nothing
+
+**Output**: Comments addressed, changes pushed, reviews re-requested
 
 ---
 
@@ -69,6 +89,7 @@ Confirm cycle completed and prepare for next.
   - Comments remaining: X
   - Addressed: [list]
   - Unable to address: [list with reasons]
+  - Reviews re-requested: [authors, or "none (reply-only cycle)"]
   ```
 - [ ] Save cycle log to `.claude/.tmp/evidence/pr-watch/`
 - [ ] Wait 120 seconds
