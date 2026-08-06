@@ -21,7 +21,7 @@ Use when `.env` values have changed in the main repo and you need to refresh the
 
 ## Phase 2: Plan
 
-- [ ] Plan to invoke `bash "$MAIN_REPO/.claude/scripts/worktree-sync-env.sh" "$PWD"`
+- [ ] Plan to invoke `bash "$MAIN_REPO/${CLAUDE_PLUGIN_ROOT}/scripts/worktree-sync-env.sh" "$PWD"`
 
 **Output**: command planned
 
@@ -30,7 +30,7 @@ Use when `.env` values have changed in the main repo and you need to refresh the
 ## Phase 3: Execute
 
 ```bash
-bash "$MAIN_REPO/.claude/scripts/worktree-sync-env.sh" "$PWD"
+bash "$MAIN_REPO/${CLAUDE_PLUGIN_ROOT}/scripts/worktree-sync-env.sh" "$PWD"
 ```
 
 **Output**: env files copied

@@ -127,7 +127,7 @@ function init() {
   // Directories to copy
   const dirs = [
     { src: 'skills', dest: 'skills', description: 'skills (commands)' },
-    { src: 'workflows', dest: 'workflows', description: 'workflows' },
+    { src: 'skills/ah/workflows', dest: 'workflows', description: 'workflows' },
     { src: 'agents', dest: 'agents', description: 'agents' },
     { src: 'rules', dest: 'rules', description: 'rules' },
     { src: 'templates', dest: 'templates', description: 'templates' },

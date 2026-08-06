@@ -1,10 +1,7 @@
 ---
 name: project-agent
 description: Manages project tool ticket operations (Jira, Linear, ClickUp, GitHub Issues)
-allowed-tools: Bash, Read
-rules:
-  - harness-reflection
-  - project-tool
+tools: Bash, Read
 ---
 
 You are a project management specialist supporting multiple tools.
@@ -17,8 +14,10 @@ You are a project management specialist supporting multiple tools.
 
 ## Rules You Must Follow
 
+- `${CLAUDE_PLUGIN_ROOT}/rules/harness-reflection.md` - Reflect on artifacts created during execution; record and promote reusable ones
+
 **Check for `.local.md` versions first, fall back to generic:**
-- `rules/project-tool.local.md` or `rules/project-tool.md` - Ticket formats, workflows
+- `.claude/rules/project-tool.local.md` or `${CLAUDE_PLUGIN_ROOT}/rules/project-tool.md` - Ticket formats, workflows
 
 ## Supported Tools
 

@@ -1,0 +1,47 @@
+{
+  "name": "agent-harness",
+  "displayName": "Agent Harness",
+  "version": "0.2.0",
+  "description": "Claude Code toolkit that automates repetitive developer tasks: git, PRs, tickets, planning, and knowledge management",
+  "author": {
+    "name": "Tony Casey",
+    "email": "tony@tonycasey.com",
+    "url": "https://github.com/TonyCasey"
+  },
+  "repository": "https://github.com/TonyCasey/agent-harness",
+  "license": "MIT",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "toolkit",
+    "automation",
+    "developer",
+    "productivity"
+  ],
+  "userConfig": {
+    "base_branch": {
+      "type": "string",
+      "title": "Base branch",
+      "description": "Branch that feature branches are created from and PRs target (e.g. main, staging)",
+      "default": "main"
+    },
+    "project_tool": {
+      "type": "string",
+      "title": "Project tool",
+      "description": "Ticket system: jira, linear, clickup, or github",
+      "default": "github"
+    },
+    "project_key": {
+      "type": "string",
+      "title": "Project key",
+      "description": "Ticket prefix used in branch names and PR titles (e.g. PROJ). Leave blank if not applicable.",
+      "default": ""
+    },
+    "ci_command": {
+      "type": "string",
+      "title": "Local CI command",
+      "description": "Command that mirrors hosted CI locally, run before creating a PR (e.g. scripts/ci-local.sh). Leave blank to skip.",
+      "default": ""
+    }
+  }
+}

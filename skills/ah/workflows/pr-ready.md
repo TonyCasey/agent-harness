@@ -4,6 +4,8 @@ description: Prepare current branch for pull request
 agent: developer
 ---
 
+> **Base branch**: `$BASE_BRANCH` below means the configured base branch — plugin config `base_branch`, else the `BASE_BRANCH` env var (`.claude/.env`), else the repo default branch.
+
 # PR Ready Workflow
 
 ## Phase 1: Research
@@ -11,7 +13,7 @@ agent: developer
 Check current branch state and gather context.
 
 - [ ] Verify all changes are committed
-- [ ] Verify branch is ahead of `staging`
+- [ ] Verify branch is ahead of `$BASE_BRANCH`
 - [ ] Verify branch is pushed to remote
 - [ ] Identify what changed in this branch
 

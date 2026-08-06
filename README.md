@@ -20,22 +20,34 @@ This toolkit shifts the focus from writing code to **designing environments that
 
 ## Quick Start
 
-### 1. Install
+### 1. Install as a Claude Code plugin (recommended)
+
+Inside Claude Code:
+
+```
+/plugin marketplace add TonyCasey/agent-harness
+/plugin install agent-harness@tonycasey
+```
+
+You'll be prompted for the base branch, project tool, project key, and local
+CI command when the plugin is enabled. To pin the plugin for all
+collaborators on a repo, add the marketplace to `extraKnownMarketplaces` and
+the plugin to `enabledPlugins` in that repo's `.claude/settings.json`.
+
+<details>
+<summary>Legacy install (npm, copies files into <code>.claude/</code>)</summary>
 
 ```bash
 npm install -g @tonycasey/agent-harness
-```
-
-### 2. Initialize in Your Project
-
-```bash
 cd /path/to/your/project
 ah init
 ```
 
 This creates `.claude/` with skills, workflows, agents, rules, and templates.
 
-### 3. Run Claude
+</details>
+
+### 2. Run Claude
 
 ```bash
 claude
@@ -284,18 +296,24 @@ User Command → Skill → Workflow → Agent → Rules/Templates → Output
                               Agent Memory
 ```
 
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| **Skill** | `.claude/skills/ah/` | Entry point, routes commands |
-| **Workflow** | `.claude/workflows/` | R→P→E→V step sequences |
-| **Agent** | `.claude/agents/` | Executor with tools and rules |
-| **Rule** | `.claude/rules/` | Constraints (formats, standards) |
-| **Template** | `.claude/templates/` | Artifact templates |
-| **Memory** | `.claude/memory/` | Persistent agent memory |
+| Component | Plugin location | Purpose |
+|-----------|-----------------|---------|
+| **Skill** | `skills/ah/` | Entry point, routes commands |
+| **Workflow** | `skills/ah/workflows/` | R→P→E→V step sequences |
+| **Agent** | `agents/` | Executor with tools and rules |
+| **Rule** | `rules/` | Constraints (formats, standards) |
+| **Template** | `templates/` | Artifact templates |
+| **Memory** | `.claude/memory/` (per project) | Persistent agent memory |
+
+With the plugin install, everything except per-project state (knowledge,
+plans, memory, evidence) ships inside the plugin; projects can override any
+rule with `.claude/rules/<name>.local.md` or any workflow with
+`.claude/workflows/<name>.md`. Legacy `ah init` installs copy the same files
+into `.claude/`.
 
 ---
 
-## Project Structure (after `ah init`)
+## Project Structure (legacy, after `ah init`)
 
 ```
 .claude/

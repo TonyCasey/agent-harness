@@ -1,6 +1,6 @@
 # Commit Standards Rule
 
-Generic commit standards. For project-specific conventions, create `rules/commit-standards.local.md`.
+Generic commit standards. For project-specific conventions, create `.claude/rules/commit-standards.local.md`.
 
 Follow conventional commits format:
 
@@ -59,7 +59,7 @@ updated stuff
 
 ## Local Overrides
 
-To customize for your project, create `rules/commit-standards.local.md` with:
+To customize for your project, create `.claude/rules/commit-standards.local.md` with:
 - Custom scopes for your codebase
 - Additional commit types
 - Company-specific footer requirements

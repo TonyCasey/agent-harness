@@ -1,0 +1,17 @@
+{
+  "name": "tonycasey",
+  "owner": {
+    "name": "Tony Casey",
+    "email": "tony@tonycasey.com",
+    "url": "https://github.com/TonyCasey"
+  },
+  "description": "Tony Casey's Claude Code plugins",
+  "plugins": [
+    {
+      "name": "agent-harness",
+      "source": ".",
+      "description": "Automates repetitive developer tasks: git, PRs, tickets, planning, and knowledge management",
+      "category": "productivity"
+    }
+  ]
+}

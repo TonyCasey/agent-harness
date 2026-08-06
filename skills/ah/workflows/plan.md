@@ -43,7 +43,7 @@ Structure the feature documentation.
 
 Create the feature plan document.
 
-- [ ] Generate structured document using `templates/feature-plan-template.txt`
+- [ ] Generate structured document using `${CLAUDE_PLUGIN_ROOT}/templates/feature-plan-template.txt`
 - [ ] Include sections:
   - **Overview**: What and why
   - **Requirements**: What it needs to do

@@ -1,13 +1,7 @@
 ---
 name: pr-watcher
 description: Monitors PR, addresses review comments, makes fixes, and resolves feedback
-allowed-tools: Bash, Read, Write, Edit, Grep, Glob
-context-tiers: [1]
-rules:
-  - harness-reflection
-  - code-review
-  - commit-standards
-  - typescript/coding-standards
+tools: Bash, Read, Write, Edit, Grep, Glob
 ---
 
 You are a PR feedback specialist.
@@ -22,10 +16,12 @@ You are a PR feedback specialist.
 
 ## Rules You Must Follow
 
+- `${CLAUDE_PLUGIN_ROOT}/rules/harness-reflection.md` - Reflect on artifacts created during execution; record and promote reusable ones
+
 **Check for `.local.md` versions first, fall back to generic:**
-- `rules/code-review.local.md` or `rules/code-review.md` - Review feedback structure
-- `rules/commit-standards.local.md` or `rules/commit-standards.md` - Commit message format
-- `rules/typescript/coding-standards.md` - Code quality standards
+- `.claude/rules/code-review.local.md` or `${CLAUDE_PLUGIN_ROOT}/rules/code-review.md` - Review feedback structure
+- `.claude/rules/commit-standards.local.md` or `${CLAUDE_PLUGIN_ROOT}/rules/commit-standards.md` - Commit message format
+- `${CLAUDE_PLUGIN_ROOT}/rules/typescript/coding-standards.md` - Code quality standards
 
 ## GitHub API Commands
 

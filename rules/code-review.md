@@ -1,6 +1,6 @@
 # Code Review Rule
 
-Generic review standards. For project-specific criteria, create `rules/code-review.local.md`.
+Generic review standards. For project-specific criteria, create `.claude/rules/code-review.local.md`.
 
 When reviewing code, check for:
 
@@ -44,7 +44,7 @@ When reviewing code, check for:
 
 ## Local Overrides
 
-To customize for your project, create `rules/code-review.local.md` with:
+To customize for your project, create `.claude/rules/code-review.local.md` with:
 - Company-specific review criteria
 - Required architectural checks
 - Domain-specific validation rules

@@ -1,6 +1,6 @@
 # PR Description Rule
 
-Generic PR standards. For project-specific requirements, create `rules/pr-description.local.md`.
+Generic PR standards. For project-specific requirements, create `.claude/rules/pr-description.local.md`.
 
 ## Title Format
 
@@ -19,7 +19,7 @@ Always create PRs in **draft mode** (`--draft` flag). This allows:
 
 ## Template
 
-Use template: `templates/pr-description-template.local.txt` if exists, otherwise `templates/pr-description-template.txt`
+Use template: `.claude/templates/pr-description-template.local.txt` if exists, otherwise `${CLAUDE_PLUGIN_ROOT}/templates/pr-description-template.txt`
 
 ## Unit Test Coverage Requirement
 
@@ -86,19 +86,19 @@ Transition ticket to "In Review" status if using a project tool.
 For subtasks with dependencies, use sequential PRs (not stacked):
 
 ```
-staging ──┬──────────────┬──────────────┬──▶
+base ─────┬──────────────┬──────────────┬──▶
           │              │              │
           └─ TASK-1 ─PR──┘              │
                          └─ TASK-2 ─PR──┘
 ```
 
-Each subtask branches from latest `staging`, PRs into `staging`, wait for merge.
+Each subtask branches from the latest base branch, PRs into it, wait for merge.
 
 ---
 
 ## Local Overrides
 
-To customize for your project, create `rules/pr-description.local.md` with:
+To customize for your project, create `.claude/rules/pr-description.local.md` with:
 - Company-specific sections
 - Required labels
 - Repository-specific testing instructions

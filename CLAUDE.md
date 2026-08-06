@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Agent Harness (`/ah`) is a Claude Code toolkit that helps developers automate repetitive tasks through a layered architecture.
+Agent Harness (`/ah`) is a Claude Code **plugin** (manifest in `.claude-plugin/plugin.json`, distributed via the marketplace file in the same directory) that helps developers automate repetitive tasks through a layered architecture. The repo root is the plugin root: `skills/`, `agents/`, `rules/`, `templates/`, and `hooks/hooks.json` ship with the plugin. A legacy npm installer (`bin/cli.js`, `ah init`) copies the same files into a project's `.claude/`.
 
 ## Knowledge Base (Load at Session Start)
 
@@ -96,7 +96,7 @@ ah workflow <name>             # Run a workflow by name
 | Component | Location | Purpose |
 |-----------|----------|---------|
 | **Skill** | `skills/` | Entry point - routes user command to workflow |
-| **Workflow** | `workflows/` | Steps - defines WHAT to do, in what order |
+| **Workflow** | `skills/ah/workflows/` | Steps - defines WHAT to do, in what order |
 | **Agent** | `agents/` | Executor - defines WHO executes, with what tools, following which rules |
 | **Rule** | `rules/` | Constraints - requirements that MUST be followed (formats, standards) |
 | **Template** | `templates/` | Artifacts - files to fill in during execution |
@@ -114,7 +114,7 @@ User invokes: ah pr create "My feature"
 └─────────────────────────────────────────────────────────┘
                          ↓
 ┌─────────────────────────────────────────────────────────┐
-│ 2. WORKFLOW (workflows/pr-create.md)                    │
+│ 2. WORKFLOW (skills/ah/workflows/pr-create.md)          │
 │    - Defines steps 1-6 (WHAT to do)                     │
 │    - Specifies which agent executes                     │
 └─────────────────────────────────────────────────────────┘
@@ -161,7 +161,7 @@ Rules are NOT step-by-step instructions. They are requirements/constraints the a
 manifest.json                # Package manifest
 skills/                      # Entry points (slash commands)
   ah/                        # ah <command> [subcommand] [args]
-workflows/                   # Step sequences (WHAT to do)
+skills/ah/workflows/         # Step sequences (WHAT to do)
   git-checkout.md            # Branch checkout/creation
   git-commit.md              # Commit with AI trailers
   git-push.md                # Push to remote
@@ -250,7 +250,7 @@ memory/                      # Agent memory files
 - Entry point invoked by users
 - Routes to workflow based on arguments
 
-**Workflow**: `workflows/<name>.md`
+**Workflow**: `skills/ah/workflows/<name>.md`
 - Frontmatter: `agent: <agent-name>`
 - Body: numbered steps (WHAT to do)
 

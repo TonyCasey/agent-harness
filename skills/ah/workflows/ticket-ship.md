@@ -4,10 +4,12 @@ description: End-to-end pipeline - ClickUp ticket to draft PR (ticket-start -> i
 agent: developer
 ---
 
+> **Base branch**: `$BASE_BRANCH` below means the configured base branch — plugin config `base_branch`, else the `BASE_BRANCH` env var (`.claude/.env`), else the repo default branch.
+
 # Ticket Ship Workflow
 
 One command drives a ticket from "Ready" to a reviewed draft PR into
-`staging`: fetch the ticket, branch, implement with tests, validate, open the
+`$BASE_BRANCH`: fetch the ticket, branch, implement with tests, validate, open the
 draft PR, transition the ticket to In Review, and post the PR link back to
 the ClickUp task.
 
@@ -16,7 +18,7 @@ gates defined below. Runs interactively (user watching) or headless
 (`claude -p`); the gates behave differently per mode as noted.
 
 **Hard rules (all stages):**
-- Base branch is `staging` — never `main`/`master`.
+- Base branch is `$BASE_BRANCH` (from config; do not assume `main`/`master`).
 - Draft PRs only. Never merge. Never mark ready-for-review.
 - One ticket per run.
 - All ClickUp access via REST API (`$CLICKUP_API_KEY` + `$CLICKUP_TEAM_ID`
@@ -28,7 +30,7 @@ gates defined below. Runs interactively (user watching) or headless
 
 ## Phase 1: Research
 
-Delegate to `.claude/workflows/ticket-start.md` Phase 1:
+Delegate to `${CLAUDE_PLUGIN_ROOT}/skills/ah/workflows/ticket-start.md` Phase 1:
 
 - [ ] Normalize the ticket ref (bare number → `$PROJECT_KEY-N`)
 - [ ] Fetch the task by custom ID:
@@ -64,14 +66,14 @@ curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task
 ## Phase 2: Plan
 
 - [ ] Branch plan per `ticket-start.md`: fetch origin, checkout latest
-  `staging`, create/checkout branch named exactly `$TICKET`
+  `$BASE_BRANCH`, create/checkout branch named exactly `$TICKET`
 - [ ] Plan ticket transition to the list's working status (fetch exact names first — see 3.1)
 - [ ] Outline implementation:
-  - **Bug** → follow `.claude/workflows/bug-fix.md` (failing test first,
+  - **Bug** → follow `${CLAUDE_PLUGIN_ROOT}/skills/ah/workflows/bug-fix.md` (failing test first,
     root cause, minimal fix)
-  - **Feature/task** → follow `.claude/workflows/new-feature.md` (test
+  - **Feature/task** → follow `${CLAUDE_PLUGIN_ROOT}/skills/ah/workflows/new-feature.md` (test
     stubs, implement, existing patterns)
-- [ ] Read required rules per `.claude/workflows/develop.md` (clean
+- [ ] Read required rules per `${CLAUDE_PLUGIN_ROOT}/skills/ah/workflows/develop.md` (clean
   architecture, testing principles, coding standards, commit standards)
 
 **Output**: Branch plan, implementation plan with test cases
@@ -83,8 +85,8 @@ curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task
 ### 3.1 Branch + ticket In Progress
 
 - [ ] Working tree clean check (warn interactive / EXIT headless if dirty)
-- [ ] `git fetch origin && git checkout staging && git pull --ff-only`
-- [ ] `git checkout -b $TICKET` (or checkout + rebase onto `staging` if it exists)
+- [ ] `git fetch origin && git checkout $BASE_BRANCH && git pull --ff-only`
+- [ ] `git checkout -b $TICKET` (or checkout + rebase onto `$BASE_BRANCH` if it exists)
 - [ ] Fetch the list's status names (GET /api/v2/list/{list_id} — statuses vary per list;
   this list uses "in development", NOT "in progress"), then transition the
   task to the working status (`ticket-transition.md`, ClickUp curl
@@ -98,27 +100,25 @@ curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task
 
 ### 3.3 Test
 
-- [ ] Fast feedback while iterating: single-file jest runs for changed code
-  (`cd packages/<p> && npx jest <file>`), plus
-  `npx nx lint:diff-with-main <project> --configuration=fix` for quick lint fixes
-- [ ] Authoritative check — if the project provides a local CI mirror
-  (`scripts/ci-local.sh`, running the same path-gated jobs as the hosted
-  CI), it is the gate:
+- [ ] Fast feedback while iterating: run only the tests covering the changed
+  code with the project's test runner (e.g. a single-file `npx jest <file>`
+  run), plus the project's quick lint-fix command if it has one
+- [ ] Authoritative check — if a local CI mirror command is configured
+  (plugin config `ci_command`, else `$CI_COMMAND` env var — e.g.
+  `scripts/ci-local.sh`, running the same jobs as the hosted CI), it is the
+  gate:
   ```bash
   mkdir -p .claude/.tmp/evidence/ticket-ship/$TICKET   # tee can't create it
   set -o pipefail   # without it, tee's exit status masks a red run
-  scripts/ci-local.sh --dry-run   # see which jobs the diff triggers
-  scripts/ci-local.sh 2>&1 | tee .claude/.tmp/evidence/ticket-ship/$TICKET/ci-local.txt
+  $CI_COMMAND 2>&1 | tee .claude/.tmp/evidence/ticket-ship/$TICKET/ci-local.txt
   ```
-  Use `--no-tests` for intermediate iterations if the suites are slow, but
-  the full run (default flags) must be green before Gate 2 passes. Suites
-  the mirror keeps behind opt-in flags (e.g. storybook, integration) still
-  run in hosted CI on the PR — pass the flags when the change touches
-  those areas.
-- [ ] Without a CI mirror script: run the affected package suites
-  (`npx nx test <project>`), lint + typecheck
-  (`npx nx lint:diff-with-main <project>`, `npx nx typecheck <project>`),
-  and save outputs to `.claude/.tmp/evidence/ticket-ship/$TICKET/`
+  If the mirror supports partial runs for slow suites, they may be used for
+  intermediate iterations, but a full run must be green before Gate 2
+  passes. Suites the mirror keeps behind opt-in flags still run in hosted
+  CI on the PR — pass the flags when the change touches those areas.
+- [ ] Without a configured CI command: run the affected test suites, lint,
+  and typecheck with the project's own commands, and save outputs to
+  `.claude/.tmp/evidence/ticket-ship/$TICKET/`
 
 ### 🚧 GATE 2 — Local CI green (max 3 fix iterations)
 
@@ -134,8 +134,8 @@ iteration, STOP:
 
 ### 3.4 PR readiness
 
-- [ ] Delegate to `.claude/workflows/pr-ready.md`: all changes committed,
-  branch ahead of `staging`, no merge conflicts with `staging`, pushed to
+- [ ] Delegate to `${CLAUDE_PLUGIN_ROOT}/skills/ah/workflows/pr-ready.md`: all changes committed,
+  branch ahead of `$BASE_BRANCH`, no merge conflicts with `$BASE_BRANCH`, pushed to
   remote
 
 ### 🚧 GATE 3 — Codex cross-model review (max 2 rounds)
@@ -146,7 +146,7 @@ API key registered via `printenv OPENAI_API_KEY | codex login --with-api-key`,
 where the key lives as `OPEN_API_KEY` in `.claude/.env`):
 
 ```bash
-codex exec review --base staging \
+codex exec review --base $BASE_BRANCH \
   2>&1 | tee .claude/.tmp/evidence/ticket-ship/$TICKET/codex-review-round1.md
 ```
 
@@ -154,7 +154,7 @@ Note: the codex CLI does not allow custom instructions together with
 `--base` — the deterministic diff scope matters more, so use codex's
 default review instructions. Codex labels findings `[P1]`/`[P2]`/`[P3]`
 (highest priority first). After the run, classify each finding yourself as
-**blocking | suggestion | nitpick** per `.claude/rules/code-review.md` —
+**blocking | suggestion | nitpick** per `${CLAUDE_PLUGIN_ROOT}/rules/code-review.md` —
 the P-label is a signal, not the decision (a `[P2]` correctness bug is
 still blocking). Record the mapping in the evidence file, then run the
 evaluate/fix/re-run loop:
@@ -188,19 +188,20 @@ evaluate/fix/re-run loop:
 
 ### 3.5 Create draft PR
 
-- [ ] Delegate to `.claude/workflows/pr-create.md`. Its local-CI pre-flight
+- [ ] Delegate to `${CLAUDE_PLUGIN_ROOT}/skills/ah/workflows/pr-create.md`. Its local-CI pre-flight
   reuses the Gate 2 evidence when HEAD is unchanged; if Gate 3 codex fixes
   added commits, it re-runs — that re-validation is wanted, not redundant.
   Non-negotiables:
   ```bash
-  gh pr create --draft --base staging \
+  gh pr create --draft --base $BASE_BRANCH \
     --title "[$TICKET] - <short description>" \
-    --label TEST \
-    --body "<from templates/pr-description-template.txt>"
+    --body "<from ${CLAUDE_PLUGIN_ROOT}/templates/pr-description-template.txt>"
   ```
-- [ ] Body follows `.claude/rules/pr-description.md` (Changes, Testing,
+  Add any labels the project's conventions require (see
+  `.claude/rules/pr-description.local.md` if present).
+- [ ] Body follows `${CLAUDE_PLUGIN_ROOT}/rules/pr-description.md` (Changes, Testing,
   Functionality Review with test-verification checkboxes, Linked Issues
-  with the ClickUp task URL, Documentation). Take the task URL from the
+  with the ticket URL, Documentation). Take the ticket URL from the
   `url` field of the ticket snapshot — never construct/guess it
 - [ ] Testing section includes the Gate 3 verdict line
   (`Cross-model review: codex — <N> blocking after <R> round(s)`)
@@ -210,9 +211,9 @@ evaluate/fix/re-run loop:
 Verify before close-out; fix and re-verify if any fail:
 
 - [ ] `gh pr view --json isDraft` → `true`
-- [ ] `gh pr view --json baseRefName` → `staging`
+- [ ] `gh pr view --json baseRefName` → `$BASE_BRANCH`
 - [ ] Title matches `[$TICKET] - ...`
-- [ ] `TEST` label present
+- [ ] Any project-required labels present
 
 **Output**: Draft PR URL
 
@@ -249,7 +250,7 @@ Verify before close-out; fix and re-verify if any fail:
   (stages completed, gate outcomes, iteration counts, PR URL)
 - [ ] Report: ticket, branch, PR URL, test/lint results, anything deferred
 
-**Output**: Draft PR into `staging`, ticket In Review with PR link, evidence
+**Output**: Draft PR into `$BASE_BRANCH`, ticket In Review with PR link, evidence
 
 ---
 

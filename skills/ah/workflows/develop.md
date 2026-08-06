@@ -4,6 +4,8 @@ description: Execute development tasks from a plan with strict adherence to arch
 agent: developer
 ---
 
+> **Base branch**: `$BASE_BRANCH` below means the configured base branch — plugin config `base_branch`, else the `BASE_BRANCH` env var (`.claude/.env`), else the repo default branch.
+
 # Develop Workflow
 
 Execute tasks from an execution plan with strict adherence to architectural principles and coding standards.
@@ -12,10 +14,10 @@ Execute tasks from an execution plan with strict adherence to architectural prin
 
 **You MUST read and follow these rules before writing any code:**
 
-1. `.claude/rules/shared/clean-architecture.md` - Layer structure, SOLID, dependency inversion
-2. `.claude/rules/shared/testing-principles.md` - Testing pyramid, FIRST principles, AAA pattern
-3. `.claude/rules/typescript/coding-standards.md` - TypeScript conventions, strict null checks, naming
-4. **Commit Standards**: Check for `.claude/rules/commit-standards.local.md` first, fall back to `.claude/rules/commit-standards.md`
+1. `${CLAUDE_PLUGIN_ROOT}/rules/shared/clean-architecture.md` - Layer structure, SOLID, dependency inversion
+2. `${CLAUDE_PLUGIN_ROOT}/rules/shared/testing-principles.md` - Testing pyramid, FIRST principles, AAA pattern
+3. `${CLAUDE_PLUGIN_ROOT}/rules/typescript/coding-standards.md` - TypeScript conventions, strict null checks, naming
+4. **Commit Standards**: Check for `.claude/rules/commit-standards.local.md` first, fall back to `${CLAUDE_PLUGIN_ROOT}/rules/commit-standards.md`
 
 **These are not optional.** Consult them before implementation and verify compliance before committing.
 
@@ -61,7 +63,7 @@ Design implementation following Clean Architecture.
 Implement following TDD and Clean Architecture.
 
 ### 3.1 Setup
-- [ ] Fetch latest `staging`
+- [ ] Fetch latest `$BASE_BRANCH`
 - [ ] Create/checkout task branch (ticket ID or descriptive name)
 
 ### 3.2 Interfaces First
