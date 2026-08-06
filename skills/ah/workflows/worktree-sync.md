@@ -21,7 +21,7 @@ Use when `.env` values have changed in the main repo and you need to refresh the
 
 ## Phase 2: Plan
 
-- [ ] Plan to invoke `bash "$MAIN_REPO/${CLAUDE_PLUGIN_ROOT}/scripts/worktree-sync-env.sh" "$PWD"`
+- [ ] Plan to invoke the sync script — `${CLAUDE_PLUGIN_ROOT}/scripts/worktree-sync-env.sh` (plugin install) or `$MAIN_REPO/.claude/scripts/worktree-sync-env.sh` (legacy install)
 
 **Output**: command planned
 
@@ -30,7 +30,10 @@ Use when `.env` values have changed in the main repo and you need to refresh the
 ## Phase 3: Execute
 
 ```bash
-bash "$MAIN_REPO/${CLAUDE_PLUGIN_ROOT}/scripts/worktree-sync-env.sh" "$PWD"
+# Plugin install: the sync script ships with the plugin. Legacy install: it was copied into .claude/scripts/.
+SYNC_SCRIPT="${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/worktree-sync-env.sh}"
+SYNC_SCRIPT="${SYNC_SCRIPT:-$MAIN_REPO/.claude/scripts/worktree-sync-env.sh}"
+bash "$SYNC_SCRIPT" "$PWD"
 ```
 
 **Output**: env files copied

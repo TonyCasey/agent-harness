@@ -25,7 +25,7 @@ You are a development specialist.
 - `.claude/rules/commit-standards.local.md` or `${CLAUDE_PLUGIN_ROOT}/rules/commit-standards.md` - Commit message format
 
 ## Behavior
-- Always create branch from latest `staging`
+- Always create branches from the latest configured base branch (plugin config `base_branch`, else `$BASE_BRANCH` env var, else the repo default branch)
 - Write tests before or alongside implementation
 - Make small, incremental commits
 - Run tests after each significant change

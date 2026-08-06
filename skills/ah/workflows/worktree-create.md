@@ -51,7 +51,10 @@ Always run with absolute paths so it works correctly when invoked from inside an
 
 ```bash
 git worktree add -b "<name>" "$MAIN_REPO/.claude/worktrees/<name>" "<base-branch>"
-bash "$MAIN_REPO/${CLAUDE_PLUGIN_ROOT}/scripts/worktree-sync-env.sh" "$MAIN_REPO/.claude/worktrees/<name>"
+# Plugin install: the sync script ships with the plugin. Legacy install: it was copied into .claude/scripts/.
+SYNC_SCRIPT="${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/worktree-sync-env.sh}"
+SYNC_SCRIPT="${SYNC_SCRIPT:-$MAIN_REPO/.claude/scripts/worktree-sync-env.sh}"
+bash "$SYNC_SCRIPT" "$MAIN_REPO/.claude/worktrees/<name>"
 ```
 
 - [ ] Create the worktree

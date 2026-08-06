@@ -164,7 +164,12 @@ function init() {
   const srcHooks = path.join(packageRoot, 'hooks', 'hooks.json');
   const destHooks = path.join(claudeDir, 'hooks.json');
   if (fs.existsSync(srcHooks)) {
-    const ahHooks = JSON.parse(fs.readFileSync(srcHooks, 'utf8'));
+    // hooks.json ships with plugin paths; legacy installs have no plugin
+    // root, so point ${CLAUDE_PLUGIN_ROOT} references at .claude/ instead.
+    const rawHooks = fs.readFileSync(srcHooks, 'utf8')
+      .replace(/\\"\$\{CLAUDE_PLUGIN_ROOT\}\\"\//g, '.claude/')
+      .replace(/\$\{CLAUDE_PLUGIN_ROOT\}\//g, '.claude/');
+    const ahHooks = JSON.parse(rawHooks);
     let finalHooks = ahHooks;
 
     if (fs.existsSync(destHooks)) {
