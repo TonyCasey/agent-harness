@@ -43,7 +43,7 @@ const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'))
 // Workflow References
 // ============================================================================
 
-console.log('\n1. Workflow References (SKILL.md → workflows/)');
+console.log('\n1. Workflow References (SKILL.md → skills/ah/workflows/)');
 
 const skillPath = path.join(ROOT, 'skills', 'ah', 'SKILL.md');
 const skillContent = fs.readFileSync(skillPath, 'utf8');
@@ -52,7 +52,7 @@ const skillContent = fs.readFileSync(skillPath, 'utf8');
 const workflowRefs = [...skillContent.matchAll(/workflows\/([a-z0-9-]+)\.md/g)]
   .map(m => m[1]);
 
-const workflowDir = path.join(ROOT, 'workflows');
+const workflowDir = path.join(ROOT, 'skills', 'ah', 'workflows');
 const existingWorkflows = fs.readdirSync(workflowDir)
   .filter(f => f.endsWith('.md'))
   .map(f => f.replace('.md', ''));
@@ -125,12 +125,9 @@ const existingRules = getAllRules(rulesDir);
 const agentRules = new Set();
 for (const agent of existingAgents) {
   const content = fs.readFileSync(path.join(agentDir, `${agent}.md`), 'utf8');
-  const match = content.match(/^rules:\s*\n((?:\s+-\s+.+\n?)+)/m);
-  if (match) {
-    const rules = match[1].match(/-\s+(.+)/g) || [];
-    for (const r of rules) {
-      agentRules.add(r.replace(/^-\s+/, '').trim());
-    }
+  // Body references shipped plugin rules as ${CLAUDE_PLUGIN_ROOT}/rules/<name>.md
+  for (const m of content.matchAll(/\$\{CLAUDE_PLUGIN_ROOT\}\/rules\/([a-zA-Z0-9_/-]+)\.md/g)) {
+    agentRules.add(m[1]);
   }
 }
 
@@ -155,12 +152,9 @@ const existingTemplates = fs.readdirSync(templatesDir)
 const agentTemplates = new Set();
 for (const agent of existingAgents) {
   const content = fs.readFileSync(path.join(agentDir, `${agent}.md`), 'utf8');
-  const match = content.match(/^templates:\s*\n((?:\s+-\s+.+\n?)+)/m);
-  if (match) {
-    const templates = match[1].match(/-\s+(.+)/g) || [];
-    for (const t of templates) {
-      agentTemplates.add(t.replace(/^-\s+/, '').trim());
-    }
+  // Body references shipped plugin templates as ${CLAUDE_PLUGIN_ROOT}/templates/<name>
+  for (const m of content.matchAll(/\$\{CLAUDE_PLUGIN_ROOT\}\/templates\/([a-zA-Z0-9_.-]+)/g)) {
+    agentTemplates.add(m[1]);
   }
 }
 

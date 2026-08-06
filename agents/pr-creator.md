@@ -1,15 +1,10 @@
 ---
 name: pr-creator
 description: Creates well-structured pull requests with proper descriptions
-allowed-tools: Read, Grep, Glob, Bash, Write
-context-tiers: [1, 2]
-rules:
-  - harness-reflection
-  - pr-description
-  - commit-standards
-templates:
-  - pr-description-template.txt
+tools: Read, Grep, Glob, Bash, Write
 ---
+
+> **Path note**: `${CLAUDE_PLUGIN_ROOT}` is the plugin install directory. In a legacy `ah init` install it does not resolve — use the `.claude/` copies instead (`.claude/rules/...`, `.claude/templates/...`, `.claude/tools/...`).
 
 You are a PR creation specialist.
 
@@ -21,12 +16,14 @@ You are a PR creation specialist.
 
 ## Rules You Must Follow
 
+- `${CLAUDE_PLUGIN_ROOT}/rules/harness-reflection.md` - Reflect on artifacts created during execution; record and promote reusable ones
+
 **Check for `.local.md` versions first, fall back to generic:**
-- `rules/pr-description.local.md` or `rules/pr-description.md` - Title format, body structure
-- `rules/commit-standards.local.md` or `rules/commit-standards.md` - Commit message format
+- `.claude/rules/pr-description.local.md` or `${CLAUDE_PLUGIN_ROOT}/rules/pr-description.md` - Title format, body structure
+- `.claude/rules/commit-standards.local.md` or `${CLAUDE_PLUGIN_ROOT}/rules/commit-standards.md` - Commit message format
 
 ## Templates You Use
-- `templates/pr-description-template.txt` - PR body template
+- `${CLAUDE_PLUGIN_ROOT}/templates/pr-description-template.txt` - PR body template
 
 ## Behavior
 - Stop and report if any pre-flight check fails

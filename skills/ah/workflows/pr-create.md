@@ -4,14 +4,16 @@ description: Create a pull request with proper description and checks
 agent: pr-creator
 ---
 
+> **Base branch**: `$BASE_BRANCH` below means the configured base branch — plugin config `base_branch`, else the `BASE_BRANCH` env var (`.claude/.env`), else the repo default branch.
+
 # PR Create Workflow
 
 ## Required Rules
 
 **You MUST read and follow these rules before creating the PR:**
 
-1. **PR Description**: Check for `.claude/rules/pr-description.local.md` first, fall back to `.claude/rules/pr-description.md`
-2. **Commit Standards**: Check for `.claude/rules/commit-standards.local.md` first, fall back to `.claude/rules/commit-standards.md`
+1. **PR Description**: Check for `.claude/rules/pr-description.local.md` first, fall back to `${CLAUDE_PLUGIN_ROOT}/rules/pr-description.md`
+2. **Commit Standards**: Check for `.claude/rules/commit-standards.local.md` first, fall back to `${CLAUDE_PLUGIN_ROOT}/rules/commit-standards.md`
 
 **These are not optional.** Verify compliance before creating the PR.
 
@@ -21,9 +23,9 @@ agent: pr-creator
 
 Gather context about the current branch and changes.
 
-- [ ] Verify on a feature branch (not `staging`/`main`)
+- [ ] Verify on a feature branch (not `$BASE_BRANCH`/`main`)
 - [ ] Check for uncommitted changes
-- [ ] Get commits since branching from `staging`
+- [ ] Get commits since branching from `$BASE_BRANCH`
 - [ ] Identify changed files
 - [ ] Extract ticket from branch name (PROJ-XXXX)
 - [ ] Detect change type (feature, fix, refactor, docs)
@@ -37,7 +39,7 @@ Gather context about the current branch and changes.
 Validate readiness and plan PR content.
 
 - [ ] Ensure branch is pushed to remote
-- [ ] Check for merge conflicts with `staging`
+- [ ] Check for merge conflicts with `$BASE_BRANCH`
 - [ ] Review test coverage for changed code
 - [ ] Identify any missing tests that must be added
 - [ ] Plan PR title and description sections
@@ -50,29 +52,30 @@ Validate readiness and plan PR content.
 
 Run checks, create tests if needed, and create the PR.
 
-- [ ] Run the authoritative checks. If the project provides a local CI
-  mirror (`scripts/ci-local.sh` — same path-gated jobs as the hosted CI),
-  it is the gate; all triggered jobs must pass before the PR is created:
+- [ ] Run the authoritative checks. If a local CI mirror command is
+  configured (plugin config `ci_command`, else `$CI_COMMAND` env var — e.g.
+  `scripts/ci-local.sh`, mirroring the hosted CI), it is the gate; all
+  triggered jobs must pass before the PR is created:
   ```bash
   mkdir -p .claude/.tmp/evidence/pr-create   # tee can't create the directory
   set -o pipefail   # without it, tee's exit status masks a red run
-  scripts/ci-local.sh --dry-run   # see which jobs the diff triggers
-  scripts/ci-local.sh 2>&1 | tee .claude/.tmp/evidence/pr-create/ci-local.txt
+  $CI_COMMAND 2>&1 | tee .claude/.tmp/evidence/pr-create/ci-local.txt
   ```
   Reuse rule: skip the run if an evidence file from this session (e.g.
   ticket-ship Gate 2) shows the **same HEAD sha** in its header and ends
   green — copy it into the pr-create evidence path instead. Any new commit
   since that run means a fresh run.
-- [ ] Without a CI mirror script: run linters and tests directly (all must
+- [ ] Without a configured CI command: run linters and tests directly (all must
   pass), saving outputs to the evidence paths below
 - [ ] **Create unit tests for new/changed code if missing** (then re-run
   the checks)
-- [ ] Generate PR description using `templates/pr-description-template.local.txt`
-  if it exists, falling back to `templates/pr-description-template.txt`
+- [ ] Generate PR description using `.claude/templates/pr-description-template.local.txt`
+  if it exists, falling back to `${CLAUDE_PLUGIN_ROOT}/templates/pr-description-template.txt`
 - [ ] Create PR in draft mode:
   ```bash
-  gh pr create --draft --title "[PROJ-XXXX] - ..." --base staging --body "..."
+  gh pr create --draft --title "[$PROJECT_KEY-XXXX] - ..." --base $BASE_BRANCH --body "..."
   ```
+  (Omit the `[$PROJECT_KEY-XXXX] - ` prefix when no project key is configured.)
 - [ ] If the repo uses Copilot code review, request it (works on drafts).
   `gh pr edit --add-reviewer` cannot resolve the bot — use the REST endpoint:
   ```bash

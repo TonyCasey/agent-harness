@@ -4,6 +4,8 @@ description: Start a new feature with branch, tests, and implementation
 agent: developer
 ---
 
+> **Base branch**: `$BASE_BRANCH` below means the configured base branch — plugin config `base_branch`, else the `BASE_BRANCH` env var (`.claude/.env`), else the repo default branch.
+
 # New Feature Workflow
 
 ## Phase 1: Research
@@ -25,7 +27,7 @@ Understand the feature requirements and codebase context.
 
 Design the implementation approach.
 
-- [ ] Fetch latest `staging`
+- [ ] Fetch latest `$BASE_BRANCH`
 - [ ] Plan file structure and naming
 - [ ] Define expected behavior (test cases)
 - [ ] Identify any dependencies or prerequisites

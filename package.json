@@ -30,8 +30,8 @@
   },
   "files": [
     "bin/",
+    ".claude-plugin/",
     "skills/",
-    "workflows/",
     "agents/",
     "rules/",
     "templates/",

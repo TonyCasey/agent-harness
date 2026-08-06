@@ -1,6 +1,6 @@
 # Feature Planning Rule
 
-Generic planning standards. For project-specific conventions, create `rules/feature-planning.local.md`.
+Generic planning standards. For project-specific conventions, create `.claude/rules/feature-planning.local.md`.
 
 ## File Structure
 Planning creates two files:
@@ -88,7 +88,7 @@ Structure varies by tool:
 
 ## Local Overrides
 
-To customize for your project, create `rules/feature-planning.local.md` with:
+To customize for your project, create `.claude/rules/feature-planning.local.md` with:
 - Custom task sizing guidelines
 - Team-specific naming conventions
 - Required plan sections

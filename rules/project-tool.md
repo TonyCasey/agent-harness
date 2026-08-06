@@ -1,10 +1,14 @@
 # Project Tool Rule
 
-Generic project tool conventions. For project-specific configuration, create `rules/project-tool.local.md`.
+Generic project tool conventions. For project-specific configuration, create `.claude/rules/project-tool.local.md`.
 
 This rule defines conventions for project management tools. Agent Harness supports multiple tools - detect which one is configured and adapt accordingly.
 
 ## Configuration
+
+When installed as the agent-harness plugin, `project_tool` and `project_key`
+come from the plugin's user config (prompted when the plugin is enabled); the
+environment variables below are the fallback for legacy `.claude/` installs.
 
 Environment variables (generic):
 - `$PROJECT_TOOL` - Which tool: jira, linear, clickup, github-issues
@@ -118,7 +122,7 @@ gh issue close 123
 
 ## Local Overrides
 
-To customize for your project, create `rules/project-tool.local.md` with:
+To customize for your project, create `.claude/rules/project-tool.local.md` with:
 - Specific project keys and URLs
 - Custom status workflows
 - Required fields for ticket creation

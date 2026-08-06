@@ -40,7 +40,7 @@ Ask the user before promoting if:
 
 ## Recording Procedure
 
-**Always** record artifacts in `memory/harness.json`:
+**Always** record artifacts in the project's `.claude/memory/harness.json`:
 
 ```json
 {
@@ -59,14 +59,17 @@ Add to the `candidates` array. If the artifact already exists in candidates, inc
 
 ### When Promoting
 
-1. **Determine target location:**
+1. **Determine target location.** Promotion targets the project's `.claude/`
+   directory — the installed plugin is read-only. If an artifact is general
+   purpose enough to benefit every project, also suggest upstreaming it to the
+   agent-harness plugin repository.
 
    | Type | Target | Example |
    |------|--------|---------|
-   | script | `scripts/<name>.sh` | `scripts/check-coverage.sh` |
-   | rule | `rules/<name>.md` | `rules/test-before-commit.md` |
-   | template | `templates/<name>.txt` | `templates/bug-triage.txt` |
-   | workflow | `workflows/<name>.md` | `workflows/dependency-check.md` |
+   | script | `.claude/scripts/<name>.sh` | `.claude/scripts/check-coverage.sh` |
+   | rule | `.claude/rules/<name>.md` | `.claude/rules/test-before-commit.md` |
+   | template | `.claude/templates/<name>.txt` | `.claude/templates/bug-triage.txt` |
+   | workflow | `.claude/workflows/<name>.md` | `.claude/workflows/dependency-check.md` |
 
 2. **Create the file** in the target location with proper formatting:
    - Scripts: Add shebang, comments, make executable
@@ -74,17 +77,18 @@ Add to the `candidates` array. If the artifact already exists in candidates, inc
    - Templates: Use placeholder syntax `{{variable}}`
    - Workflows: Include frontmatter with agent assignment
 
-3. **Update `memory/harness.json`:**
+3. **Update `.claude/memory/harness.json`:**
    - Remove from `candidates` array
    - Add to `promotions` array with `promoted_to` field
 
 4. **Update references** if needed:
-   - If it's a rule, consider adding to relevant agents
-   - If it's a workflow, add to skill routing
+   - If it's a rule, agents pick it up as a project-local rule
+   - If it's a workflow, it is runnable via `ah workflow <name>` (project
+     `.claude/workflows/` overrides the plugin's copy)
 
 5. **Log the promotion:**
    ```
-   Promoted: .tmp/check-coverage.sh → scripts/check-coverage.sh
+   Promoted: .tmp/check-coverage.sh → .claude/scripts/check-coverage.sh
    ```
 
 ### High Confidence Flow
@@ -132,7 +136,7 @@ Reflection:
 - Exists? No script for this in harness
 - Type? Clearly a script
 
-→ High confidence. Auto-promoting to scripts/run-tests-watch.sh
+→ High confidence. Auto-promoting to .claude/scripts/run-tests-watch.sh
 ```
 
 ### Example 2: Ask User (Low Confidence)
@@ -148,7 +152,7 @@ Reflection:
 
 → Low confidence. Asking user:
 "I created a Jira response parser. This could be promoted to 
-scripts/parse-jira-response.sh. Should I promote it?"
+.claude/scripts/parse-jira-response.sh. Should I promote it?"
 ```
 
 ### Example 3: Pattern Becomes Rule
@@ -160,13 +164,13 @@ Reflection:
 - This is a behavioral pattern, not a script
 - Should be a rule that agents follow
 
-→ Promote to rules/test-before-commit.md
+→ Promote to .claude/rules/test-before-commit.md
 ```
 
 ## Memory Schema Reference
 
 ```json
-// memory/harness.json
+// .claude/memory/harness.json
 {
   "name": "harness",
   "last_updated": "ISO-8601 timestamp",

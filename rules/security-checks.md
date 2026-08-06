@@ -1,6 +1,6 @@
 # Security Checks Rule
 
-Generic security standards. For project-specific requirements, create `rules/security-checks.local.md`.
+Generic security standards. For project-specific requirements, create `.claude/rules/security-checks.local.md`.
 
 When reviewing code for security:
 
@@ -46,7 +46,7 @@ If you see any of these, flag as BLOCKING:
 
 ## Local Overrides
 
-To customize for your project, create `rules/security-checks.local.md` with:
+To customize for your project, create `.claude/rules/security-checks.local.md` with:
 - Industry-specific compliance requirements (HIPAA, PCI-DSS, SOC2)
 - Company security policies
 - Required security scanning tools

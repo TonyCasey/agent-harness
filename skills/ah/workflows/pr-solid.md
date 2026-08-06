@@ -4,6 +4,8 @@ description: SOLID principles and best practices audit for PR changes
 agent: developer
 ---
 
+> **Base branch**: `$BASE_BRANCH` below means the configured base branch — plugin config `base_branch`, else the `BASE_BRANCH` env var (`.claude/.env`), else the repo default branch.
+
 # PR SOLID Audit Workflow
 
 Audits changed code in the current branch for SOLID principles and clean architecture violations.
@@ -12,14 +14,14 @@ Audits changed code in the current branch for SOLID principles and clean archite
 
 Identify what code changed in this branch.
 
-- [ ] Get list of changed files vs staging branch
+- [ ] Get list of changed files vs $BASE_BRANCH branch
 - [ ] Filter to source files only (exclude tests, configs, generated)
 - [ ] Categorize by layer: domain, application, infrastructure, UI
 - [ ] Identify new vs modified files
 
 ```bash
 # Get changed TypeScript files
-git diff --name-only origin/staging...HEAD -- '*.ts' '*.tsx' | grep -v -E '(test|spec|config|\.d\.ts)' > .tmp/changed-files.txt
+git diff --name-only origin/$BASE_BRANCH...HEAD -- '*.ts' '*.tsx' | grep -v -E '(test|spec|config|\.d\.ts)' > .tmp/changed-files.txt
 ```
 
 **Output**: List of changed source files by category

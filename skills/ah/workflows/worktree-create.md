@@ -4,6 +4,8 @@ description: Create a git worktree under .claude/worktrees/<name> and sync gitig
 agent: developer
 ---
 
+> **Base branch**: `$BASE_BRANCH` below means the configured base branch — plugin config `base_branch`, else the `BASE_BRANCH` env var (`.claude/.env`), else the repo default branch.
+
 # Worktree Create Workflow
 
 Creates a worktree at `<main-repo>/.claude/worktrees/<name>` and copies all gitignored `.env` files (root + per-app/service) plus `.claude/.agent-harness` into it, so the new worktree is immediately usable.
@@ -15,7 +17,7 @@ Creates a worktree at `<main-repo>/.claude/worktrees/<name>` and copies all giti
 Parse arguments and resolve paths.
 
 - [ ] Extract `<name>` (required) — used for both the worktree directory and the new branch
-- [ ] Extract `<base-branch>` (optional, default: `staging`)
+- [ ] Extract `<base-branch>` (optional, default: `$BASE_BRANCH`)
 - [ ] Resolve main repo path:
   ```bash
   MAIN_REPO=$(git worktree list --porcelain | awk '/^worktree / {print $2; exit}')
@@ -49,7 +51,10 @@ Always run with absolute paths so it works correctly when invoked from inside an
 
 ```bash
 git worktree add -b "<name>" "$MAIN_REPO/.claude/worktrees/<name>" "<base-branch>"
-bash "$MAIN_REPO/.claude/scripts/worktree-sync-env.sh" "$MAIN_REPO/.claude/worktrees/<name>"
+# Plugin install: the sync script ships with the plugin. Legacy install: it was copied into .claude/scripts/.
+SYNC_SCRIPT="${CLAUDE_PLUGIN_ROOT:+${CLAUDE_PLUGIN_ROOT}/scripts/worktree-sync-env.sh}"
+SYNC_SCRIPT="${SYNC_SCRIPT:-$MAIN_REPO/.claude/scripts/worktree-sync-env.sh}"
+bash "$SYNC_SCRIPT" "$MAIN_REPO/.claude/worktrees/<name>"
 ```
 
 - [ ] Create the worktree

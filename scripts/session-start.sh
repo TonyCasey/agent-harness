@@ -24,10 +24,15 @@ fi
 
 echo ""
 
-# Count rules
-RULE_COUNT=$(find .claude/rules -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+# Count rules (plugin install ships rules with the plugin; legacy install uses .claude/rules)
+if [ -n "$CLAUDE_PLUGIN_ROOT" ] && [ -d "$CLAUDE_PLUGIN_ROOT/rules" ]; then
+  RULES_DIR="$CLAUDE_PLUGIN_ROOT/rules"
+else
+  RULES_DIR=".claude/rules"
+fi
+RULE_COUNT=$(find "$RULES_DIR" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
 RULE_COUNT=${RULE_COUNT:-0}
-echo "Rules: ${RULE_COUNT} files in .claude/rules/"
+echo "Rules: ${RULE_COUNT} files in ${RULES_DIR}/"
 
 echo ""
 
