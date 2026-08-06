@@ -22,7 +22,7 @@ Detect tool, fetch ticket, and understand the requirement.
 - [ ] Read `$PROJECT_TOOL`, `$PROJECT_KEY`, `$PROJECT_BASE_URL` from `.env`
 - [ ] Extract ticket reference from arguments. Accept either:
   - Bare number (e.g. `28`) → normalize to `$PROJECT_KEY-28`
-  - Full ID (e.g. `LTBL-28`) → use as-is
+  - Full ID (e.g. `PROJ-28`) → use as-is
 - [ ] Fetch ticket details using the configured tool (see Phase 3 commands in
   `${CLAUDE_PLUGIN_ROOT}/skills/ah/workflows/ticket-view.md`). For ClickUp, ALWAYS query by
   `custom_id` with `custom_task_ids=true&team_id=$CLICKUP_TEAM_ID` — do not
@@ -82,7 +82,7 @@ git checkout -b $PROJECT_KEY-XXX    # or: git checkout $PROJECT_KEY-XXX
 
 ### 3.2 Transition ticket to In Progress
 
-Delegate to `${CLAUDE_PLUGIN_ROOT}/skills/ah/workflows/ticket-transition.md`. For ClickUp:
+Delegate to `${CLAUDE_PLUGIN_ROOT}/skills/ah/workflows/ticket-transition.md`. Example (ClickUp):
 
 ```bash
 curl -X PUT "https://api.clickup.com/api/v2/task/$PROJECT_KEY-XXX?custom_task_ids=true&team_id=$CLICKUP_TEAM_ID" \
@@ -133,7 +133,7 @@ Confirm environment is ready for work.
 ## Notes
 
 - Base branch is `$BASE_BRANCH` (from config; do not assume `main`).
-- Branch naming MUST match the ticket custom ID exactly (e.g. `LTBL-28`) so
+- Branch naming MUST match the ticket custom ID exactly (e.g. `PROJ-28`) so
   `ah pr create` and other workflows can link the PR back to the ticket.
 - If the ticket is a sub-task, still name the branch after the sub-task's
   custom ID, not the parent.

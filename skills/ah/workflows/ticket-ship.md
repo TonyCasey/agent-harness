@@ -1,6 +1,6 @@
 ---
 name: ticket-ship
-description: End-to-end pipeline - ClickUp ticket to draft PR (ticket-start -> implement -> test -> pr-ready -> pr-create -> close-out)
+description: End-to-end pipeline - ticket to draft PR (ticket-start -> implement -> test -> pr-ready -> pr-create -> close-out)
 agent: developer
 ---
 
@@ -11,7 +11,7 @@ agent: developer
 One command drives a ticket from "Ready" to a reviewed draft PR into
 `$BASE_BRANCH`: fetch the ticket, branch, implement with tests, validate, open the
 draft PR, transition the ticket to In Review, and post the PR link back to
-the ClickUp task.
+the ticket.
 
 **Execute automatically** — do not prompt between stages. Stop ONLY at the
 gates defined below. Runs interactively (user watching) or headless
@@ -21,10 +21,25 @@ gates defined below. Runs interactively (user watching) or headless
 - Base branch is `$BASE_BRANCH` (from config; do not assume `main`/`master`).
 - Draft PRs only. Never merge. Never mark ready-for-review.
 - One ticket per run.
-- All ClickUp access via REST API (`$CLICKUP_API_KEY` + `$CLICKUP_TEAM_ID`
-  from `.claude/.env`), never MCP — headless runs have no MCP auth.
-- Every stop (success or failure) is mirrored to the ClickUp task so the
-  pipeline is observable from ClickUp alone.
+- Every stop (success or failure) is mirrored to the ticket so the
+  pipeline is observable from the project tool alone.
+
+## Ticket operations
+
+All ticket reads, comments, and status transitions go through the configured
+project tool (`project_tool` in plugin config, else `$PROJECT_TOOL`) using its
+CLI or REST API with credentials from `.claude/.env` — never MCP tools, since
+headless runs have no MCP auth. Per-tool commands live in:
+
+- `${CLAUDE_PLUGIN_ROOT}/rules/project-tool.md` — conventions, ticket formats, statuses
+- `${CLAUDE_PLUGIN_ROOT}/skills/ah/workflows/ticket-view.md` — fetch a ticket
+- `${CLAUDE_PLUGIN_ROOT}/skills/ah/workflows/ticket-transition.md` — change status
+
+The inline snippets below are **ClickUp examples** (the trickiest tool:
+custom-ID lookups need `custom_task_ids=true&team_id=$CLICKUP_TEAM_ID`, and
+@mentions need the structured `comment` array, not `comment_text`). For Jira,
+Linear, or GitHub Issues, substitute the equivalent command from the files
+above — the pipeline steps are identical.
 
 ---
 
@@ -33,7 +48,8 @@ gates defined below. Runs interactively (user watching) or headless
 Delegate to `${CLAUDE_PLUGIN_ROOT}/skills/ah/workflows/ticket-start.md` Phase 1:
 
 - [ ] Normalize the ticket ref (bare number → `$PROJECT_KEY-N`)
-- [ ] Fetch the task by custom ID:
+- [ ] Fetch the ticket via the project tool (`ticket-view.md`). Example (ClickUp —
+  always query by custom ID, never the internal task ID):
   ```bash
   curl -s -H "Authorization: $CLICKUP_API_KEY" \
     "https://api.clickup.com/api/v2/task/$TICKET?custom_task_ids=true&team_id=$CLICKUP_TEAM_ID"
@@ -49,10 +65,11 @@ Stop here if the ticket is ambiguous, contradicts the codebase, or is too
 large for a single PR (would touch >~15 files or multiple unrelated areas).
 
 - **Interactive**: ask the user the specific questions; continue on answers.
-- **Headless**: post the questions as a ClickUp comment, set task status to
+- **Headless**: post the questions as a ticket comment, set the ticket to
   a "needs info"-type status if one exists (otherwise leave status and rely
   on the comment), and EXIT. Never guess requirements.
 
+Example (ClickUp):
 ```bash
 curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task_ids=true&team_id=$CLICKUP_TEAM_ID" \
   -H "Authorization: $CLICKUP_API_KEY" -H "Content-Type: application/json" \
@@ -67,7 +84,8 @@ curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task
 
 - [ ] Branch plan per `ticket-start.md`: fetch origin, checkout latest
   `$BASE_BRANCH`, create/checkout branch named exactly `$TICKET`
-- [ ] Plan ticket transition to the list's working status (fetch exact names first — see 3.1)
+- [ ] Plan ticket transition to the working status (fetch exact status names
+  first — see 3.1)
 - [ ] Outline implementation:
   - **Bug** → follow `${CLAUDE_PLUGIN_ROOT}/skills/ah/workflows/bug-fix.md` (failing test first,
     root cause, minimal fix)
@@ -87,10 +105,10 @@ curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task
 - [ ] Working tree clean check (warn interactive / EXIT headless if dirty)
 - [ ] `git fetch origin && git checkout $BASE_BRANCH && git pull --ff-only`
 - [ ] `git checkout -b $TICKET` (or checkout + rebase onto `$BASE_BRANCH` if it exists)
-- [ ] Fetch the list's status names (GET /api/v2/list/{list_id} — statuses vary per list;
-  this list uses "in development", NOT "in progress"), then transition the
-  task to the working status (`ticket-transition.md`, ClickUp curl
-  with `custom_task_ids=true&team_id=$CLICKUP_TEAM_ID`)
+- [ ] Fetch the exact status names from the project tool first — statuses
+  vary per project/list (e.g. a ClickUp list may use "in development", not
+  "in progress"; ClickUp: GET /api/v2/list/{list_id}) — then transition the
+  ticket to the working status (`ticket-transition.md`)
 
 ### 3.2 Implement
 
@@ -128,8 +146,8 @@ iteration, STOP:
 
 - Never weaken, skip, or delete tests to get green.
 - **Interactive**: report the failure with output; ask how to proceed.
-- **Headless**: push the branch as-is (WIP, no PR), comment on the ClickUp
-  task with the failure summary + branch link, leave the working status,
+- **Headless**: push the branch as-is (WIP, no PR), comment on the ticket
+  with the failure summary + branch link, leave the working status,
   EXIT.
 
 ### 3.4 PR readiness
@@ -169,12 +187,12 @@ evaluate/fix/re-run loop:
   **Max 2 rounds total** — then stop looping regardless
 - [ ] If blocking findings remain after round 2:
   - **Interactive**: report the findings + your assessment; ask how to proceed
-  - **Headless**: push the branch WIP (no PR), ClickUp comment with the
+  - **Headless**: push the branch WIP (no PR), ticket comment with the
     verdict + branch link, EXIT (same shape as Gate 2 headless failure)
 - [ ] Record the final verdict line for the PR description:
   `Cross-model review: codex — <N> blocking after <R> round(s)`
-- [ ] Post codex review summary to ClickUp task (use structured `comment`
-  array — plain text, no markdown tables):
+- [ ] Post the codex review summary as a ticket comment. Example (ClickUp —
+  structured `comment` array, plain text, no markdown tables):
   ```bash
   curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task_ids=true&team_id=$CLICKUP_TEAM_ID" \
     -H "Authorization: $CLICKUP_API_KEY" -H "Content-Type: application/json" \
@@ -221,14 +239,16 @@ Verify before close-out; fix and re-verify if any fail:
 
 ## Phase 4: Verify (close-out)
 
-- [ ] Transition task to "in review":
+- [ ] Transition the ticket to the review status (`ticket-transition.md` —
+  use the exact status name fetched in 3.1). Example (ClickUp):
   ```bash
   curl -s -X PUT "https://api.clickup.com/api/v2/task/$TICKET?custom_task_ids=true&team_id=$CLICKUP_TEAM_ID" \
     -H "Authorization: $CLICKUP_API_KEY" -H "Content-Type: application/json" \
     -d '{"status": "in review"}'
   ```
-- [ ] Comment the PR link on the task (use structured `comment` array for
-  mentions — `comment_text` does not support @mentions):
+- [ ] Comment the PR link on the ticket. Example (ClickUp — use the
+  structured `comment` array for mentions; `comment_text` does not support
+  @mentions):
   ```bash
   curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task_ids=true&team_id=$CLICKUP_TEAM_ID" \
     -H "Authorization: $CLICKUP_API_KEY" -H "Content-Type: application/json" \
@@ -236,7 +256,8 @@ Verify before close-out; fix and re-verify if any fail:
       {"text": "🤖 ticket-ship: draft PR ready → <PR_URL>\nTests: <n> passing | Lint: clean | Typecheck: clean"}
     ]}'
   ```
-- [ ] Notify assignee that PR is ready for review (structured mention):
+- [ ] Notify the assignee that the PR is ready for review. Example (ClickUp
+  structured mention):
   ```bash
   curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task_ids=true&team_id=$CLICKUP_TEAM_ID" \
     -H "Authorization: $CLICKUP_API_KEY" -H "Content-Type: application/json" \
@@ -245,7 +266,7 @@ Verify before close-out; fix and re-verify if any fail:
       {"text": " PR ready for review! <PR_URL>"}
     ]}'
   ```
-- [ ] Confirm task status is now "in review" (GET the task)
+- [ ] Confirm the ticket status is now the review status (re-fetch the ticket)
 - [ ] Save run summary to `.claude/.tmp/evidence/ticket-ship/$TICKET/summary.md`
   (stages completed, gate outcomes, iteration counts, PR URL)
 - [ ] Report: ticket, branch, PR URL, test/lint results, anything deferred
@@ -258,13 +279,13 @@ Verify before close-out; fix and re-verify if any fail:
 
 | Failure | Interactive | Headless |
 |---|---|---|
-| Ambiguous ticket (Gate 1) | Ask user | ClickUp comment + exit |
+| Ambiguous ticket (Gate 1) | Ask user | Ticket comment + exit |
 | Dirty working tree | Warn + ask | Exit with comment |
 | Local CI red after 3 iterations (Gate 2) | Report + ask | Push WIP branch, comment, exit |
 | Blocking codex findings after 2 rounds (Gate 3) | Report + ask | Push WIP branch, comment, exit |
 | codex unavailable (Gate 3) | Ask to skip | Skip; mark PR + evidence SKIPPED |
 | PR shape wrong (Gate 4) | Fix + re-verify | Fix + re-verify; if impossible, comment + exit |
-| ClickUp API error on close-out | Report; PR already exists — give URL | Retry once, then exit non-zero (PR URL in stdout) |
+| Project tool API error on close-out | Report; PR already exists — give URL | Retry once, then exit non-zero (PR URL in stdout) |
 
 ---
 
