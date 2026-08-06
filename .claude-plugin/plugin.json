@@ -28,8 +28,8 @@
     "project_tool": {
       "type": "string",
       "title": "Project tool",
-      "description": "Ticket system: jira, linear, clickup, or github",
-      "default": "github"
+      "description": "Ticket system: jira, linear, clickup, or github-issues",
+      "default": "github-issues"
     },
     "project_key": {
       "type": "string",

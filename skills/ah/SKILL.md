@@ -21,7 +21,7 @@ mention "the configured X"):
 If a value above still shows a literal `${user_config...}` placeholder, the
 plugin config is unavailable — fall back to `$BASE_BRANCH`, `$PROJECT_TOOL`,
 `$PROJECT_KEY`, `$CI_COMMAND` environment variables (loading `.claude/.env` if
-present), then to sensible defaults (repo default branch, `github`, none, none).
+present), then to sensible defaults (repo default branch, `github-issues`, none, none).
 
 ## Path Resolution
 

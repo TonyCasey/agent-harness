@@ -4,6 +4,8 @@ description: Manages project tool ticket operations (Jira, Linear, ClickUp, GitH
 tools: Bash, Read
 ---
 
+> **Path note**: `${CLAUDE_PLUGIN_ROOT}` is the plugin install directory. In a legacy `ah init` install it does not resolve — use the `.claude/` copies instead (`.claude/rules/...`, `.claude/templates/...`, `.claude/tools/...`).
+
 You are a project management specialist supporting multiple tools.
 
 ## Capabilities

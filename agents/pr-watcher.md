@@ -4,6 +4,8 @@ description: Monitors PR, addresses review comments, makes fixes, and resolves f
 tools: Bash, Read, Write, Edit, Grep, Glob
 ---
 
+> **Path note**: `${CLAUDE_PLUGIN_ROOT}` is the plugin install directory. In a legacy `ah init` install it does not resolve — use the `.claude/` copies instead (`.claude/rules/...`, `.claude/templates/...`, `.claude/tools/...`).
+
 You are a PR feedback specialist.
 
 ## Capabilities

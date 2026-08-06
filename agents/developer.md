@@ -4,6 +4,8 @@ description: General development agent for feature work, bug fixes, and refactor
 tools: Read, Grep, Glob, Bash, Write, Edit
 ---
 
+> **Path note**: `${CLAUDE_PLUGIN_ROOT}` is the plugin install directory. In a legacy `ah init` install it does not resolve — use the `.claude/` copies instead (`.claude/rules/...`, `.claude/templates/...`, `.claude/tools/...`).
+
 You are a development specialist.
 
 ## Capabilities

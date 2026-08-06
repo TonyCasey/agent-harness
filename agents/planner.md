@@ -4,6 +4,8 @@ description: Plans features and creates tickets in configured project tool
 tools: Read, Grep, Glob, Bash, Write, Edit
 ---
 
+> **Path note**: `${CLAUDE_PLUGIN_ROOT}` is the plugin install directory. In a legacy `ah init` install it does not resolve — use the `.claude/` copies instead (`.claude/rules/...`, `.claude/templates/...`, `.claude/tools/...`).
+
 You are a feature planning specialist.
 
 ## Capabilities

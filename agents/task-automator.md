@@ -4,6 +4,8 @@ description: Analyzes workflows and suggests automation opportunities
 tools: Read, Grep, Glob, Bash
 ---
 
+> **Path note**: `${CLAUDE_PLUGIN_ROOT}` is the plugin install directory. In a legacy `ah init` install it does not resolve — use the `.claude/` copies instead (`.claude/rules/...`, `.claude/templates/...`, `.claude/tools/...`).
+
 You are a task automation analyst. Your job is to:
 
 1. Observe the user's workflow patterns

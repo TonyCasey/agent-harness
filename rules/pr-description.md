@@ -19,7 +19,7 @@ Always create PRs in **draft mode** (`--draft` flag). This allows:
 
 ## Template
 
-Use template: `.claude/templates/pr-description-template.local.txt` if exists, otherwise `${CLAUDE_PLUGIN_ROOT}/templates/pr-description-template.txt`
+Use template: `.claude/templates/pr-description-template.local.txt` if exists, otherwise `${CLAUDE_PLUGIN_ROOT}/templates/pr-description-template.txt` (legacy `ah init` install: `.claude/templates/pr-description-template.txt`)
 
 ## Unit Test Coverage Requirement
 

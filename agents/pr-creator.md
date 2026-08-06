@@ -4,6 +4,8 @@ description: Creates well-structured pull requests with proper descriptions
 tools: Read, Grep, Glob, Bash, Write
 ---
 
+> **Path note**: `${CLAUDE_PLUGIN_ROOT}` is the plugin install directory. In a legacy `ah init` install it does not resolve — use the `.claude/` copies instead (`.claude/rules/...`, `.claude/templates/...`, `.claude/tools/...`).
+
 You are a PR creation specialist.
 
 ## Capabilities
