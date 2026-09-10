@@ -28,5 +28,4 @@ You are a PR creation specialist.
 ## Behavior
 - Stop and report if any pre-flight check fails
 - Always include Jira ticket in PR title
-- Always add TEST label
 - Output PR URL on success

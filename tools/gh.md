@@ -29,7 +29,7 @@ Select:
 
 ```bash
 # Create PR
-gh pr create --title "Title" --body "Body" --label "TEST" --base master
+gh pr create --title "Title" --body "Body" --base master
 
 # View PR
 gh pr view 123
@@ -197,7 +197,7 @@ export GITHUB_TOKEN="your_token"
 
 ```bash
 # Create PR with heredoc body
-gh pr create --title "[PROJ-1234] - Feature" --label "TEST" --base master --body "$(cat <<'EOF'
+gh pr create --title "[PROJ-1234] - Feature" --base master --body "$(cat <<'EOF'
 ### Changes
 - Change 1
 - Change 2
