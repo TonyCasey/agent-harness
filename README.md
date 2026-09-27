@@ -84,7 +84,7 @@ Commands are available immediately via `/ah`.
 
 # 6. When ready for PR
 /ah pr-ready      # Validates tests, lint, coverage
-/ah pr create     # Creates draft PR
+/ah pr create     # Creates PR ready for review
 
 # 7. Watch for review comments
 /ah pr watch 123  # Auto-fixes and resolves comments
@@ -245,7 +245,7 @@ Evidence provides proof of work completion and aids debugging.
 
 ### Pull Requests
 ```bash
-/ah pr create [title]           # Create draft PR with checks
+/ah pr create [title]           # Create PR with checks
 /ah pr watch <number>           # Auto-fix comments, resolve feedback
 /ah pr stop <number>            # Stop watching
 /ah pr review <repo> <pr>       # Online review (fast)

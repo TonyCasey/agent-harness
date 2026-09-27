@@ -44,7 +44,7 @@
       "subcommands": {
         "create": {
           "args": "[title]",
-          "description": "Create a pull request (draft mode)",
+          "description": "Create a pull request (ready for review)",
           "workflow": "pr-create"
         },
         "watch": {

@@ -108,7 +108,7 @@ Agent Harness Commands:
   ah pr review-submit <repo> <pr> Submit a pending review
   ah pr solid                    SOLID principles audit for current branch
 
-  ah ticket ship <ticket>        Ticket -> code -> tests -> codex review -> draft PR (full pipeline)
+  ah ticket ship <ticket>        Ticket -> code -> tests -> codex review -> PR (full pipeline)
   ah ticket create <title>       Create a ticket (Jira, Linear, ClickUp, GitHub)
   ah ticket view <ticket>        View ticket details
   ah ticket start <ticket>       Branch from base branch, transition ticket, start dev

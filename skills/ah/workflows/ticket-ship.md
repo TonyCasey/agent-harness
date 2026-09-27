@@ -1,6 +1,6 @@
 ---
 name: ticket-ship
-description: End-to-end pipeline - ticket to draft PR (ticket-start -> implement -> test -> pr-ready -> pr-create -> close-out)
+description: End-to-end pipeline - ticket to PR ready for review (ticket-start -> implement -> test -> pr-ready -> pr-create -> close-out)
 agent: developer
 ---
 
@@ -8,9 +8,9 @@ agent: developer
 
 # Ticket Ship Workflow
 
-One command drives a ticket from "Ready" to a reviewed draft PR into
-`$BASE_BRANCH`: fetch the ticket, branch, implement with tests, validate, open the
-draft PR, transition the ticket to In Review, and post the PR link back to
+One command drives a ticket from "Ready" to a pull request into
+`$BASE_BRANCH`, open for review: fetch the ticket, branch, implement with tests,
+validate, open the PR, transition the ticket to In Review, and post the PR link back to
 the ticket.
 
 **Execute automatically** — do not prompt between stages. Stop ONLY at the
@@ -19,7 +19,12 @@ gates defined below. Runs interactively (user watching) or headless
 
 **Hard rules (all stages):**
 - Base branch is `$BASE_BRANCH` (from config; do not assume `main`/`master`).
-- Draft PRs only. Never merge. Never mark ready-for-review.
+- PRs open ready for review, never as drafts. A draft suppresses Copilot's
+  automatic first review (the repository ruleset fires it when a PR goes
+  ready for review), so a draft gets no automated review until a human
+  marks it ready.
+- Never merge, approve, or close a PR. Opening one ready for review asks
+  the humans to look; it does not decide anything for them.
 - One ticket per run.
 - Every stop (success or failure) is mirrored to the ticket so the
   pipeline is observable from the project tool alone.
@@ -204,18 +209,18 @@ evaluate/fix/re-run loop:
   whether to skip the gate; **headless** — skip, and mark the PR
   description + evidence with `Cross-model review: SKIPPED (codex unavailable)`
 
-### 3.5 Create draft PR
+### 3.5 Create the PR
 
 - [ ] Delegate to `${CLAUDE_PLUGIN_ROOT}/skills/ah/workflows/pr-create.md`. Its local-CI pre-flight
   reuses the Gate 2 evidence when HEAD is unchanged; if Gate 3 codex fixes
   added commits, it re-runs — that re-validation is wanted, not redundant.
   Non-negotiables:
   ```bash
-  gh pr create --draft --base $BASE_BRANCH \
+  gh pr create --base $BASE_BRANCH \
     --title "[$TICKET] - <short description>" \
     --body "<from ${CLAUDE_PLUGIN_ROOT}/templates/pr-description-template.txt>"
   ```
-  Add any labels the project's conventions require (see
+  No `--draft`. Add any labels the project's conventions require (see
   `.claude/rules/pr-description.local.md` if present).
 - [ ] Body follows `${CLAUDE_PLUGIN_ROOT}/rules/pr-description.md` (Changes, Testing,
   Functionality Review with test-verification checkboxes, Linked Issues
@@ -228,12 +233,12 @@ evaluate/fix/re-run loop:
 
 Verify before close-out; fix and re-verify if any fail:
 
-- [ ] `gh pr view --json isDraft` → `true`
+- [ ] `gh pr view --json isDraft` → `false`
 - [ ] `gh pr view --json baseRefName` → `$BASE_BRANCH`
 - [ ] Title matches `[$TICKET] - ...`
 - [ ] Any project-required labels present
 
-**Output**: Draft PR URL
+**Output**: PR URL
 
 ---
 
@@ -253,7 +258,7 @@ Verify before close-out; fix and re-verify if any fail:
   curl -s -X POST "https://api.clickup.com/api/v2/task/$TICKET/comment?custom_task_ids=true&team_id=$CLICKUP_TEAM_ID" \
     -H "Authorization: $CLICKUP_API_KEY" -H "Content-Type: application/json" \
     -d '{"comment": [
-      {"text": "🤖 ticket-ship: draft PR ready → <PR_URL>\nTests: <n> passing | Lint: clean | Typecheck: clean"}
+      {"text": "🤖 ticket-ship: PR ready for review → <PR_URL>\nTests: <n> passing | Lint: clean | Typecheck: clean"}
     ]}'
   ```
 - [ ] Notify the assignee that the PR is ready for review. Example (ClickUp
@@ -271,7 +276,7 @@ Verify before close-out; fix and re-verify if any fail:
   (stages completed, gate outcomes, iteration counts, PR URL)
 - [ ] Report: ticket, branch, PR URL, test/lint results, anything deferred
 
-**Output**: Draft PR into `$BASE_BRANCH`, ticket In Review with PR link, evidence
+**Output**: PR into `$BASE_BRANCH` open for review, ticket In Review with PR link, evidence
 
 ---
 

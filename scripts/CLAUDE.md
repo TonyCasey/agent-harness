@@ -33,7 +33,7 @@ ah git commit [message]        # Commit with AI trailers
 ah git checkout <branch>       # Checkout or create branch
 
 # Pull Requests
-ah pr create [title]           # Create PR in draft mode
+ah pr create [title]           # Create PR ready for review
 ah pr watch <pr-number>        # Auto-fix PR comments
 ah pr review [pr-number]       # Review with inline comments
 

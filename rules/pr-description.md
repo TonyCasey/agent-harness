@@ -10,12 +10,14 @@ Generic PR standards. For project-specific requirements, create `.claude/rules/p
 
 Include the ticket/issue ID from your project tool if available.
 
-## Draft Mode
+## Ready for Review
 
-Always create PRs in **draft mode** (`--draft` flag). This allows:
-- CI checks to complete
-- Self-review before requesting reviewers
-- Mark as "Ready for review" when all checks pass
+Always create PRs **ready for review**, never with `--draft`:
+- Automated reviewers such as Copilot's code review ruleset only fire when a
+  PR is ready for review; a draft gets no automated review
+- Run the checks locally before creating the PR, so it opens green
+- Opening a PR ready for review never means merging or approving it; those
+  stay human decisions
 
 ## Template
 

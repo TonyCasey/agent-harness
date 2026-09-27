@@ -51,7 +51,7 @@ ah worktree create <name> [base]  # Create worktree + sync .env files
 ah worktree sync                  # Re-sync .env files from main repo
 
 # PR commands
-ah pr create [title]           # Create a pull request (draft mode)
+ah pr create [title]           # Create a pull request (ready for review)
 ah pr watch <pr-number>        # Address comments, make fixes, resolve (loops)
 ah pr stop <pr-number>         # Stop watching a PR
 ah pr review <repo> <pr>       # Online review (fast, creates pending review)
@@ -168,7 +168,7 @@ skills/ah/workflows/         # Step sequences (WHAT to do)
   git-status.md              # Detailed status
   git-remember.md            # Store decisions
   git-recall.md              # Search decisions
-  pr-create.md               # Create PR (draft mode)
+  pr-create.md               # Create PR (ready for review)
   pr-watch.md                # Auto-fix PR comments
   pr-stop.md                 # Stop watching a PR
   pr-review.md               # Online review (fast, no local setup)
@@ -206,7 +206,7 @@ rules/                       # Constraints (MUST follow)
   project-tool.md            # Ticket format, workflow (multi-tool)
   feature-planning.md        # Task sizing, plan format
   knowledge-format.md        # Knowledge base structure
-  pr-description.md          # PR format, draft mode, test coverage
+  pr-description.md          # PR format, ready for review, test coverage
   code-review.md             # Review structure
   security-checks.md         # Security checklist
   commit-standards.md        # Commit message format
@@ -297,7 +297,7 @@ ah git commit [message]        # Commit with AI trailers
 ah git checkout <branch>       # Checkout or create branch
 
 # Pull Requests
-ah pr create [title]           # Create PR in draft mode
+ah pr create [title]           # Create PR ready for review
 ah pr watch <pr-number>        # Auto-fix PR comments
 ah pr review [pr-number]       # Review with inline comments
 
