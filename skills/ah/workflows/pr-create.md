@@ -71,24 +71,20 @@ Run checks, create tests if needed, and create the PR.
   the checks)
 - [ ] Generate PR description using `.claude/templates/pr-description-template.local.txt`
   if it exists, falling back to `${CLAUDE_PLUGIN_ROOT}/templates/pr-description-template.txt`
-- [ ] Create PR in draft mode:
+- [ ] Create the PR ready for review (never `--draft`):
   ```bash
-  gh pr create --draft --title "[$PROJECT_KEY-XXXX] - ..." --base $BASE_BRANCH --body "..."
+  gh pr create --title "[$PROJECT_KEY-XXXX] - ..." --base $BASE_BRANCH --body "..."
   ```
   (Omit the `[$PROJECT_KEY-XXXX] - ` prefix when no project key is configured.)
-- [ ] If the repo uses Copilot code review, request it (works on drafts).
-  `gh pr edit --add-reviewer` cannot resolve the bot — use the REST endpoint:
-  ```bash
-  PR_NUMBER=$(gh pr view --json number --jq .number)
-  gh api -X POST "repos/{owner}/{repo}/pulls/$PR_NUMBER/requested_reviewers" \
-    -f 'reviewers[]=copilot-pull-request-reviewer[bot]'
-  ```
+- [ ] Do NOT request a Copilot review here. The repository ruleset fires
+  Copilot's first review automatically when a PR opens ready for review,
+  which is why PRs are never created as drafts (a draft suppresses it).
+  Re-reviews after fixes are pr-watch's job.
 
-PRs are created as drafts to allow for:
-- CI checks to run
-- Self-review before requesting reviewers
+The local CI pre-flight above is what makes opening ready for review safe:
+the PR only exists once the checks are green.
 
-**Output**: Draft PR created
+**Output**: PR created, open for review
 
 ---
 
@@ -97,8 +93,6 @@ PRs are created as drafts to allow for:
 Confirm PR was created correctly and record evidence.
 
 - [ ] Confirm PR URL is accessible
-- [ ] If a Copilot review was requested, verify it appears in requested
-  reviewers: `gh pr view --json reviewRequests`
 - [ ] Verify CI checks have started
 - [ ] Save PR metadata to `.claude/.tmp/evidence/pr-create/`
 - [ ] Output PR URL to user
