@@ -17,8 +17,16 @@ open, and pushes once.
 **Automated reviewers** are the bots that review pull requests on their own:
 Copilot (`copilot-pull-request-reviewer[bot]`), CodeRabbit (`coderabbitai[bot]`)
 and Codex (`chatgpt-codex-connector[bot]`). A bot is **expected** on this PR once
-it has reviewed any commit of it. An expected bot has **caught up** when it has
-submitted a review whose `commit_id` is the PR's head SHA.
+it has done any of these:
+- reviewed any commit of it
+- commented on it (CodeRabbit posts its summary comment minutes before its
+  first review)
+- been requested as a reviewer and not reviewed yet (Copilot, before its
+  first review)
+
+Without the last two, a PR's first round would start as soon as the fastest
+bot finished and miss the others' first reviews. An expected bot has **caught
+up** when it has submitted a review whose `commit_id` is the PR's head SHA.
 
 ## Phase 1: Research (Per Cycle)
 
@@ -29,9 +37,19 @@ Fetch the PR's state and decide whether a round can start.
 - [ ] Exit if the PR is merged or closed
 - [ ] List the expected automated reviewers and whether each has caught up:
   ```bash
+  # Reviews, with the commit each one reviewed
   gh api "repos/{owner}/{repo}/pulls/<number>/reviews" --paginate \
     --jq '.[] | "\(.user.login) \(.commit_id)"'
+  # Bots that have commented on the PR
+  gh api "repos/{owner}/{repo}/issues/<number>/comments" --paginate \
+    --jq '.[].user.login'
+  # Reviewers requested and not yet reviewed
+  gh api "repos/{owner}/{repo}/pulls/<number>/requested_reviewers" \
+    --jq '.users[].login'
   ```
+  A pending request for Copilot lists it as `Copilot`, while its reviews come
+  from `copilot-pull-request-reviewer[bot]`: treat the two as the same bot.
+  Other bots that comment, such as `sonarqubecloud[bot]`, are not reviewers.
 - [ ] Note when the head commit was pushed (the round log records each push
   this workflow makes; otherwise use the head commit's committer date)
 - [ ] Fetch CI state: `gh pr checks <number> --json name,bucket`
