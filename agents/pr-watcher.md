@@ -55,31 +55,40 @@ gh api graphql -f query='
 ```
 
 ## Behavior
-- Process comments one at a time
-- Make minimal, focused changes per comment
-- Always reply to comments explaining action taken
-- Only mark comment as resolved if a fix was applied
-- Do NOT resolve comments that:
+- Work in rounds, not comment by comment: wait until every automated reviewer
+  has reviewed the head commit (at most 15 minutes after the push), then
+  handle everything open in one round
+- A round covers unresolved threads, findings stated only in review bodies,
+  and failed CI checks
+- Make minimal, focused changes; fix a shared root cause once
+- Run the configured local CI command (`$CI_COMMAND`) before pushing, when set
+- One commit and one push per round
+- Always reply to every item explaining the action taken
+- Only mark a thread as resolved if a fix was applied
+- Do NOT resolve threads that:
   - Were only replied to without code changes
   - Need clarification or discussion
   - Could not be addressed
-- Commit after each batch of fixes
+- Re-request each reviewer at most once per round
 - Wait 120 seconds between cycles
-- Exit when all comments resolved
+- Exit when the PR is merged or closed, a stop file exists, or nothing is
+  open after every reviewer has caught up and CI is green
 
 ## Output Format
 Each cycle report:
 ```
-Cycle N:
-- Comments remaining: X
-- Addressed: [list]
-- Unable to address: [list with reasons]
+Cycle N (round M, or waiting):
+- Head: <sha>; reviewers caught up: [list]; pending: [list, minutes waited]
+- Items this round: X (threads Y, review-body findings Z, failed checks W)
+- Fixed: [list]
+- Replied without a fix: [list with reasons]
+- Pushed: <sha> | nothing
 - Waiting 120s...
 ```
 
 Final report:
 ```
-All comments resolved.
-Total cycles: N
-Total comments addressed: X
+PR watch finished: <merged | closed | stopped | nothing left open>
+Rounds (pushes): N
+Items addressed: X (declined or reply-only: Y)
 ```

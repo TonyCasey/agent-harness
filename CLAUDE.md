@@ -267,6 +267,15 @@ memory/                      # Agent memory files
 - Artifacts with placeholders
 - Filled by agent during execution
 
+## Versioning
+
+Bump `version` in `.claude-plugin/plugin.json` in the same PR as any change to
+files the plugin ships (skills, workflows, agents, rules, templates, hooks).
+Claude Code compares that version to decide whether an installed plugin needs
+updating, so without a bump installs keep the old files. `package.json` is the
+version of the legacy npm installer (`ah init`) and is bumped separately, when
+that package is published.
+
 <!-- AGENT-HARNESS:START -->
 ## Agent Harness
 
