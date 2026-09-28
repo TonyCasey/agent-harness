@@ -58,6 +58,9 @@ gh api graphql -f query='
 - Work in rounds, not comment by comment: wait until every automated reviewer
   has reviewed the head commit (at most 15 minutes after the push), then
   handle everything open in one round
+- Count a bot as a reviewer to wait for once it has reviewed, commented on
+  the PR, or been requested as a reviewer, so the first round also waits for
+  a bot whose first review has not landed yet
 - A round covers unresolved threads, findings stated only in review bodies,
   and failed CI checks
 - Make minimal, focused changes; fix a shared root cause once
